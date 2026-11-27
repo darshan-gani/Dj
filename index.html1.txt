@@ -1,0 +1,2670 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SaleRadar India — Live &amp; Upcoming Online Shopping Sales Tracker</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Configure Tailwind to use class-based dark mode and Inter font
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          boxShadow: {
+            'card': '0 1px 3px rgba(15, 23, 42, 0.05), 0 6px 20px rgba(15, 23, 42, 0.04)',
+            'card-hover': '0 10px 30px -5px rgba(15, 23, 42, 0.12)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Minimal utility overrides for scrollbar hiding on filter strips and smooth modal transitions -->
+  <style>
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.9; }
+      70% { transform: scale(1.65); opacity: 0; }
+      100% { transform: scale(1.65); opacity: 0; }
+    }
+    .animate-pulse-ring {
+      animation: pulse-ring 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased transition-colors duration-200 selection:bg-indigo-600 selection:text-white">
+
+  <!-- ==================== STICKY TOP NAVIGATION BAR ==================== -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Primary Header Row -->
+      <div class="flex items-center justify-between gap-3 h-16 sm:h-18">
+        <!-- Brand Logo -->
+        <button id="logoHomeBtn" type="button" class="flex items-center gap-2.5 text-left group focus:outline-none shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+            <!-- Radar + Price Tag SVG Icon -->
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 1 0 10 10" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6a6 6 0 1 0 6 6" />
+              <circle cx="12" cy="12" r="2" fill="currentColor" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 12l6.5-6.5" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">SaleRadar <span class="text-indigo-600 dark:text-indigo-400">India</span></span>
+            </div>
+            <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-tight hidden sm:block">Live &amp; Upcoming App Sales</p>
+          </div>
+        </button>
+
+        <!-- Global Search Bar (Desktop) -->
+        <div class="hidden md:flex flex-1 max-w-md mx-4">
+          <div class="relative w-full">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path stroke-linecap="round" d="M21 21l-4.35-4.35"></path>
+              </svg>
+            </span>
+            <input
+              id="globalSearchDesktop"
+              type="text"
+              placeholder="Search Amazon, Flipkart, iPhone, HDFC, EORS..."
+              class="w-full pl-10 pr-9 py-2 text-sm rounded-xl bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-800 transition"
+            />
+            <button
+              id="clearSearchDesktop"
+              type="button"
+              aria-label="Clear search"
+              class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Controls: Alerts Drawer + Theme Toggle -->
+        <div class="flex items-center gap-2 shrink-0">
+          <!-- My Alerts Button -->
+          <button
+            id="openAlertsBtn"
+            type="button"
+            class="relative inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/70 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition cursor-pointer"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <span class="hidden sm:inline">My Alerts</span>
+            <span id="alertsBadgeCount" class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold rounded-full bg-indigo-600 text-white">0</span>
+          </button>
+
+          <!-- Dark/Light Mode Toggle -->
+          <button
+            id="themeToggleBtn"
+            type="button"
+            aria-label="Toggle Dark Mode"
+            class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer"
+          >
+            <!-- Sun Icon (shown in dark mode) -->
+            <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="5"></circle>
+              <path stroke-linecap="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+            </svg>
+            <!-- Moon Icon (shown in light mode) -->
+            <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Search Bar -->
+      <div class="pb-3 md:hidden">
+        <div class="relative w-full">
+          <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path stroke-linecap="round" d="M21 21l-4.35-4.35"></path>
+            </svg>
+          </span>
+          <input
+            id="globalSearchMobile"
+            type="text"
+            placeholder="Search app, sale, category, or bank card..."
+            class="w-full pl-10 pr-9 py-2 text-sm rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+          />
+          <button
+            id="clearSearchMobile"
+            type="button"
+            aria-label="Clear search"
+            class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation View Switcher Tabs -->
+      <nav aria-label="Main Views" class="flex items-center gap-1.5 pb-2.5 overflow-x-auto no-scrollbar">
+        <button
+          data-view="sales"
+          class="view-tab-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+          </svg>
+          <span>All Sales</span>
+        </button>
+
+        <button
+          data-view="calendar"
+          class="view-tab-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span>Calendar Timeline</span>
+        </button>
+
+        <button
+          data-view="tools"
+          class="view-tab-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+            <line x1="2" y1="10" x2="22" y2="10"></line>
+          </svg>
+          <span>Bank Offers &amp; Deal Checker</span>
+        </button>
+
+        <div class="ml-auto hidden lg:flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 pl-4 shrink-0">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Today: <strong class="text-slate-700 dark:text-slate-200">Fri, Nov 27, 2026</strong> (Black Friday)</span>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+
+    <!-- ==================== VIEW 1: ALL SALES ==================== -->
+    <section id="view-sales" class="space-y-6">
+
+      <!-- Live Spotlight Hero Banner -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 shadow-xl border border-indigo-500/20">
+        <!-- Decorative soft glow blobs -->
+        <div class="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full bg-fuchsia-500/20 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-indigo-500/25 blur-3xl"></div>
+
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- Left Copy & CTA -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-400/30 text-rose-200 text-xs font-bold tracking-wide uppercase">
+              <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-pulse-ring absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+              </span>
+              LIVE SPOTLIGHT • FRIDAY, NOV 27, 2026
+            </div>
+
+            <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+              Black Friday &amp; Pink Friday Rush is <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-pink-300 to-indigo-300">Live Right Now!</span>
+            </h1>
+
+            <p class="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
+              Track verified deals across Amazon India, Flipkart, Myntra, AJIO, Nykaa, Tata CLiQ, Croma &amp; Meesho in one place — complete with bank card offers, early access tips, and upcoming Dec–Jan sale dates.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-3 pt-1">
+              <button
+                id="heroShowLiveBtn"
+                type="button"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-slate-900 font-bold text-sm shadow-lg hover:bg-indigo-50 active:scale-[0.98] transition cursor-pointer"
+              >
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                Show Live Sales Only (<span id="heroLiveBtnCount">7</span>)
+              </button>
+              <button
+                id="heroOpenToolsBtn"
+                type="button"
+                class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm border border-white/15 transition cursor-pointer"
+              >
+                Check Bank Offers &amp; Real Deals →
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Countdown & Quick Stats -->
+          <div class="lg:col-span-5 space-y-3.5">
+            <!-- Countdown Box -->
+            <div class="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 p-4 sm:p-5">
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#FFE500]"></span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-amber-200">Ending Tonight • 11:59 PM IST</span>
+                </div>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-500 text-white">ENDS TODAY</span>
+              </div>
+              <p class="text-sm font-bold text-white mb-3">Flipkart Black Friday Sale 2026</p>
+
+              <!-- Ticking Timer Units -->
+              <div class="grid grid-cols-3 gap-2.5 text-center">
+                <div class="rounded-xl bg-slate-950/60 border border-white/10 py-2.5 px-2">
+                  <div id="cdHours" class="text-2xl sm:text-3xl font-extrabold tabular-nums text-white">09</div>
+                  <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-0.5">Hours</div>
+                </div>
+                <div class="rounded-xl bg-slate-950/60 border border-white/10 py-2.5 px-2">
+                  <div id="cdMins" class="text-2xl sm:text-3xl font-extrabold tabular-nums text-white">13</div>
+                  <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-0.5">Minutes</div>
+                </div>
+                <div class="rounded-xl bg-slate-950/60 border border-white/10 py-2.5 px-2">
+                  <div id="cdSecs" class="text-2xl sm:text-3xl font-extrabold tabular-nums text-amber-300">59</div>
+                  <div class="text-[10px] uppercase tracking-wider font-semibold text-slate-400 mt-0.5">Seconds</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3 Mini Quick Stats -->
+            <div class="grid grid-cols-3 gap-2.5">
+              <div class="rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
+                <div id="statLiveCount" class="text-xl sm:text-2xl font-extrabold text-emerald-300">7</div>
+                <div class="text-[11px] font-medium text-slate-300 leading-tight mt-0.5">Live Sales</div>
+              </div>
+              <div class="rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
+                <div id="statUpcomingCount" class="text-xl sm:text-2xl font-extrabold text-sky-300">11</div>
+                <div class="text-[11px] font-medium text-slate-300 leading-tight mt-0.5">Dec / Jan Next</div>
+              </div>
+              <div class="rounded-2xl bg-white/10 border border-white/10 p-3 text-center">
+                <div class="text-xl sm:text-2xl font-extrabold text-amber-300">80%</div>
+                <div class="text-[11px] font-medium text-slate-300 leading-tight mt-0.5">Max Off Today</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Filter Bar -->
+      <div id="filterAnchor" class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-card space-y-4">
+        <!-- Row 1: Platform Pills -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Shopping Platforms</span>
+            <button id="resetAllFiltersBtn" type="button" class="hidden text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer">
+              Reset all filters
+            </button>
+          </div>
+          <div id="platformPillsContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Row 2: Status Buttons, Category Dropdown, Sort Dropdown -->
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <!-- Status Filter Buttons -->
+          <div id="statusFilterContainer" class="flex flex-wrap items-center gap-2">
+            <button data-status="all" class="status-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer">All</button>
+            <button data-status="live" class="status-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Live Now
+            </button>
+            <button data-status="upcoming" class="status-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer">Upcoming</button>
+            <button data-status="ended" class="status-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer">Past 2026 Archive</button>
+          </div>
+
+          <!-- Category & Sort Controls -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+            <div class="relative">
+              <label for="categorySelect" class="sr-only">Filter by Category</label>
+              <select
+                id="categorySelect"
+                class="w-full sm:w-auto pl-3.5 pr-9 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="all">All Categories</option>
+                <option value="Smartphones & Tech">Smartphones &amp; Tech</option>
+                <option value="Fashion & Footwear">Fashion &amp; Footwear</option>
+                <option value="Beauty & Skincare">Beauty &amp; Skincare</option>
+                <option value="Home & Kitchen">Home &amp; Kitchen</option>
+                <option value="Appliances & TVs">Appliances &amp; TVs</option>
+                <option value="Budget & Value Deals">Budget &amp; Value Deals</option>
+              </select>
+            </div>
+
+            <div class="relative">
+              <label for="sortSelect" class="sr-only">Sort Sales</label>
+              <select
+                id="sortSelect"
+                class="w-full sm:w-auto pl-3.5 pr-9 py-2 rounded-xl text-xs sm:text-sm font-medium bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="priority">Sort: Priority (Live First)</option>
+                <option value="discount">Sort: Highest Discount</option>
+                <option value="date">Sort: Chronological Date</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Count Bar -->
+      <div class="flex items-center justify-between text-sm text-slate-600 dark:text-slate-400">
+        <p id="resultsSummaryText" class="font-medium">Showing all 22 sales</p>
+        <p class="text-xs hidden sm:block">Click any card's <strong>Details</strong> for pro tips &amp; <code>.ics</code> calendar reminders</p>
+      </div>
+
+      <!-- Sales Cards Grid -->
+      <div id="salesGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <!-- Rendered dynamically by JS -->
+      </div>
+
+      <!-- Empty State (hidden unless 0 results) -->
+      <div id="salesEmptyState" class="hidden text-center py-14 px-6 bg-white dark:bg-slate-900 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mb-4">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path stroke-linecap="round" d="M21 21l-4.35-4.35"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">No matching sales found</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-md mx-auto">Try clearing your search keyword or switching platform, category, or status filters.</p>
+        <button id="emptyResetBtn" type="button" class="mt-4 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition cursor-pointer">
+          Show All Sales
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: CALENDAR TIMELINE ==================== -->
+    <section id="view-calendar" class="hidden space-y-8">
+      <!-- Header -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="inline-block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Annual Shopping Roadmap</span>
+          <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Sale Calendar Timeline (Nov 2026 – Jan 2027)</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Plan big purchases ahead of time. Click any event for full bank offers &amp; downloadable calendar alerts.</p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Live
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
+            <span class="w-2 h-2 rounded-full bg-sky-500"></span> Upcoming
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+            Archive
+          </span>
+        </div>
+      </div>
+
+      <!-- Month-by-Month Grouped Roadmap -->
+      <div id="calendarTimelineContainer" class="space-y-8">
+        <!-- Rendered dynamically by JS -->
+      </div>
+
+      <!-- "When to Buy What" Cheat Sheet -->
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-card">
+        <div class="mb-6">
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+            Smart Shopper Guide
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1">"When to Buy What" Cheat Sheet for India</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Maximize savings by matching your purchase category to the deepest discount window of the year.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Cheat Card 1 -->
+          <div class="rounded-2xl p-5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/70 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-extrabold text-slate-900 dark:text-white">Smartphones &amp; Tech</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300">Oct &amp; Jan</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>Best Windows:</strong> Amazon Great Indian Festival &amp; Flipkart Big Billion Days (Oct) for flagship iPhones/Samsung, followed by <strong>Black Friday (Nov)</strong> and <strong>Republic Day Sales (Mid-Jan)</strong> for laptops, TWS, and mid-range phones.
+            </p>
+            <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 pt-1">Tip: Stack 10% HDFC/SBI/Axis card + exchange bonus.</div>
+          </div>
+
+          <!-- Cheat Card 2 -->
+          <div class="rounded-2xl p-5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/70 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-extrabold text-slate-900 dark:text-white">Fashion &amp; Footwear</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-pink-100 dark:bg-pink-900/60 text-pink-700 dark:text-pink-300">Dec &amp; Jun</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>Best Windows:</strong> <strong>Myntra EORS (Early Dec)</strong>, <strong>Flipkart EOSS (Mid Dec)</strong>, and <strong>AJIO Big Bold Sale (Late Dec)</strong> deliver true 60%–90% off winter jackets, Nike/Adidas sneakers &amp; denim.
+            </p>
+            <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 pt-1">Tip: Wishlist sizes 24h before Insider Early Access opens.</div>
+          </div>
+
+          <!-- Cheat Card 3 -->
+          <div class="rounded-2xl p-5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/70 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-extrabold text-slate-900 dark:text-white">Beauty &amp; Skincare</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300">Late Nov</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>Best Windows:</strong> <strong>Nykaa Pink Friday Sale (Nov 21 – Dec 7)</strong> is unbeatable for BOGO combos, luxe skincare miniatures, and international brand launches. Myntra EORS is great for everyday makeup.
+            </p>
+            <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 pt-1">Tip: Watch for free full-size brand gifts on ₹2,000+ carts.</div>
+          </div>
+
+          <!-- Cheat Card 4 -->
+          <div class="rounded-2xl p-5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/70 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-extrabold text-slate-900 dark:text-white">ACs, TVs &amp; Appliances</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-teal-100 dark:bg-teal-900/60 text-teal-700 dark:text-teal-300">Dec &amp; Jan</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>Best Windows:</strong> Off-season winter clearance (<strong>Croma Black Friday</strong>, <strong>Year-End Sales</strong>, &amp; <strong>Jan Republic Day</strong>) drops split AC prices by 15%–25% before summer demand spikes.
+            </p>
+            <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 pt-1">Tip: Compare No-Cost EMI processing fee vs. upfront card discount.</div>
+          </div>
+
+          <!-- Cheat Card 5 -->
+          <div class="rounded-2xl p-5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/70 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-extrabold text-slate-900 dark:text-white">Budget &amp; Home Goods</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300">1st Sunday</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>Best Windows:</strong> <strong>Meesho First Sunday Maha Sale (Dec 6)</strong> and <strong>Year-End Clearance (Dec 26–31)</strong> offer lowest prices on organizers, cookware, curtains &amp; festive ethnic wear.
+            </p>
+            <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 pt-1">Tip: Check seller ratings &amp; real buyer photo reviews first.</div>
+          </div>
+
+          <!-- Cheat Card 6 -->
+          <div class="rounded-2xl p-5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/70 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-extrabold text-slate-900 dark:text-white">Watches &amp; Luxury</span>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300">Nov &amp; Dec</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>Best Windows:</strong> <strong>Tata CLiQ Black Friday (Live now)</strong> gives 12.5% instant discount on Amex/Axis/Kotak cards on top of up to 75% off designer watches, eyewear, and fine jewellery.
+            </p>
+            <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 pt-1">Tip: Use Amex or Kotak cards on Tata CLiQ for extra 12.5% off.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: BANK OFFERS & REAL DEAL CHECKER ==================== -->
+    <section id="view-tools" class="hidden space-y-8">
+
+      <!-- Part A: Select Your Bank Cards Matcher -->
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-card space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Card Offer Finder</span>
+            <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">Select Your Bank Cards</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Tap the cards in your wallet to see every Live &amp; Upcoming sale where you get instant discounts or extra cashback.</p>
+          </div>
+          <button id="clearBankCardsBtn" type="button" class="hidden self-start sm:self-center text-xs font-semibold px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
+            Clear Selected Cards
+          </button>
+        </div>
+
+        <!-- Selectable Bank Chips -->
+        <div id="bankCardSelector" class="flex flex-wrap gap-2.5">
+          <!-- Populated dynamically by JS -->
+        </div>
+
+        <!-- Matched Sales Result Area -->
+        <div class="pt-2">
+          <div class="flex items-center justify-between mb-3">
+            <h3 id="bankMatchHeading" class="text-sm font-bold text-slate-700 dark:text-slate-200">
+              Showing all Live &amp; Upcoming Sales with Bank Offers
+            </h3>
+            <span id="bankMatchCount" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300"></span>
+          </div>
+          <div id="bankMatchedSalesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Part B: Real Deal Checker Calculator -->
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-card">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Anti-Hype Calculator</span>
+            <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">Real Deal Checker</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Spot fake "70% Off MRP" traps instantly by comparing the effective sale price against the product's normal everyday price.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button id="sampleStealBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition cursor-pointer">
+              Load Example: Real Steal
+            </button>
+            <button id="sampleTrapBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/50 transition cursor-pointer">
+              Load Example: MRP Trap
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Inputs Column -->
+          <div class="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="dcMrp" class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">Product MRP (₹)</label>
+              <input id="dcMrp" type="number" min="0" step="1" value="79900" placeholder="e.g. 79900"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+
+            <div>
+              <label for="dcNormal" class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">Normal Everyday Price (₹)</label>
+              <input id="dcNormal" type="number" min="0" step="1" value="66999" placeholder="e.g. 66999"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+
+            <div>
+              <label for="dcSale" class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">Sale Listed Price (₹)</label>
+              <input id="dcSale" type="number" min="0" step="1" value="58999" placeholder="e.g. 58999"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+
+            <div>
+              <label for="dcBankPct" class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">Bank Card Discount (%)</label>
+              <input id="dcBankPct" type="number" min="0" max="50" step="0.5" value="10" placeholder="e.g. 10"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="dcBankCap" class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">Max Bank Discount Cap in ₹ <span class="font-normal text-slate-400">(optional, leave blank for no cap)</span></label>
+              <input id="dcBankCap" type="number" min="0" step="50" value="4000" placeholder="e.g. 4000 (typical cap on smartphones)"
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+          </div>
+
+          <!-- Live Result Card -->
+          <div id="dcResultCard" class="lg:col-span-6 rounded-2xl p-6 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-5">
+            <!-- Verdict Pill -->
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Verdict</span>
+              <span id="dcVerdictBadge" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold">
+                Steal Deal
+              </span>
+            </div>
+
+            <!-- Final Effective Price -->
+            <div class="flex items-baseline justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
+              <div>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Final Effective Price</p>
+                <p id="dcEffectivePrice" class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-0.5 tabular-nums">₹54,999</p>
+              </div>
+              <div class="text-right">
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">Card Discount Applied</p>
+                <p id="dcCardSaved" class="text-base font-bold text-indigo-600 dark:text-indigo-400 tabular-nums">-₹4,000</p>
+              </div>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="rounded-xl bg-white dark:bg-slate-900 p-3.5 border border-slate-200/70 dark:border-slate-700/70">
+                <p class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Real Savings vs. Normal</p>
+                <p id="dcRealSavings" class="text-lg font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5 tabular-nums">₹12,000 (17.9%)</p>
+              </div>
+              <div class="rounded-xl bg-white dark:bg-slate-900 p-3.5 border border-slate-200/70 dark:border-slate-700/70">
+                <p class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Claimed Off vs. MRP</p>
+                <p id="dcMrpDiscount" class="text-lg font-extrabold text-slate-700 dark:text-slate-200 mt-0.5 tabular-nums">31.2% off</p>
+              </div>
+            </div>
+
+            <p id="dcExplanation" class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              This is a genuinely strong discount compared to its normal everyday selling price.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="mt-12 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-800 dark:text-slate-200">SaleRadar India</span>
+        <span>•</span>
+        <span>Updated for Black Friday &amp; Winter 2026–27 Season</span>
+      </div>
+      <p class="text-center sm:text-right">Expected upcoming sale dates &amp; bank discounts are based on retailer announcements &amp; annual schedules. Always verify final checkout prices on the store app.</p>
+    </div>
+  </footer>
+
+  <!-- ==================== SALE DETAILS MODAL ==================== -->
+  <div id="saleDetailsModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-modal="true" role="dialog" aria-labelledby="modalSaleTitle">
+    <!-- Backdrop -->
+    <div id="modalBackdrop" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Modal Panel -->
+    <div class="flex min-h-full items-center justify-center p-4 sm:p-6">
+      <div class="relative w-full max-w-2xl rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden transform transition-all">
+        <!-- Colored Top Accent Bar -->
+        <div id="modalBrandStrip" class="h-2 w-full bg-indigo-600"></div>
+
+        <div class="p-6 sm:p-7 space-y-5">
+          <!-- Top Header -->
+          <div class="flex items-start justify-between gap-4">
+            <div class="space-y-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <span id="modalPlatformBadge" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold"></span>
+                <span id="modalStatusBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"></span>
+                <span id="modalUrgentBadge" class="hidden px-2.5 py-1 rounded-full text-xs font-extrabold bg-rose-600 text-white"></span>
+              </div>
+              <h3 id="modalSaleTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white leading-snug"></h3>
+              <p id="modalSaleDates" class="text-sm font-semibold text-slate-500 dark:text-slate-400"></p>
+            </div>
+            <button id="closeModalBtn" type="button" aria-label="Close modal" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white transition cursor-pointer">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Discount & Categories Row -->
+          <div class="flex flex-wrap items-center gap-2.5 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700/70">
+            <span id="modalDiscountBadge" class="px-3 py-1.5 rounded-xl text-sm font-extrabold bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200"></span>
+            <div id="modalCategoriesList" class="flex flex-wrap gap-1.5"></div>
+          </div>
+
+          <!-- Bank Offers Box -->
+          <div class="rounded-2xl p-4 bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200/70 dark:border-indigo-800/60">
+            <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-700 dark:text-indigo-300 mb-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+              </svg>
+              Bank &amp; Payment Offers
+            </div>
+            <p id="modalBankOffers" class="text-sm font-medium text-slate-800 dark:text-slate-200"></p>
+          </div>
+
+          <!-- What to Buy & Pro Tips Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="rounded-2xl p-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Best Things to Buy</h4>
+              <ul id="modalWhatToBuy" class="space-y-1.5 text-sm text-slate-700 dark:text-slate-200 list-disc list-inside"></ul>
+            </div>
+            <div class="rounded-2xl p-4 bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/50">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 mb-2">Pro Shopping Tips</h4>
+              <ul id="modalProTips" class="space-y-1.5 text-sm text-slate-700 dark:text-slate-200 list-disc list-inside"></ul>
+            </div>
+          </div>
+
+          <!-- Modal Action Buttons -->
+          <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+            <button id="modalDownloadIcsBtn" type="button" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Download .ics Calendar Reminder
+            </button>
+
+            <button id="modalRemindToggleBtn" type="button" class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold border transition cursor-pointer">
+              <!-- Text set by JS -->
+            </button>
+
+            <a id="modalVisitStoreLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl text-sm font-bold bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 transition">
+              Visit Store ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MY ALERTS SLIDE-OVER DRAWER ==================== -->
+  <div id="alertsDrawer" class="hidden fixed inset-0 z-50 overflow-hidden" aria-modal="true" role="dialog" aria-labelledby="drawerHeading">
+    <div id="drawerBackdrop" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity"></div>
+
+    <div class="fixed inset-y-0 right-0 flex max-w-full pl-10">
+      <div class="w-screen max-w-md bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col h-full">
+        <!-- Drawer Header -->
+        <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <div>
+            <h2 id="drawerHeading" class="text-lg font-extrabold text-slate-900 dark:text-white">My Sale Alerts</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Saved reminders &amp; custom wishlist alerts</p>
+          </div>
+          <button id="closeDrawerBtn" type="button" aria-label="Close Alerts Drawer" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white transition cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Drawer Scrollable Body -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+          <!-- Saved Sales Section -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Bookmarked Sales (<span id="drawerSavedSalesCount">0</span>)</h3>
+              <button id="clearSavedSalesBtn" type="button" class="hidden text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer">Clear all</button>
+            </div>
+            <div id="drawerSavedSalesList" class="space-y-2.5">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Custom Product / Sale Alert Notes -->
+          <div class="pt-5 border-t border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Personal Wishlist &amp; Target Price Notes</h3>
+            <form id="customNoteForm" class="space-y-2.5">
+              <input
+                id="customNoteInput"
+                type="text"
+                maxlength="120"
+                placeholder="e.g. Nike Pegasus under ₹6,500 in Myntra EORS..."
+                class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <button type="submit" class="w-full py-2.5 rounded-xl text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white transition cursor-pointer">
+                + Add Custom Alert Note
+              </button>
+            </form>
+            <div id="customNotesList" class="space-y-2 pt-1">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST NOTIFICATION CONTAINER ==================== -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-[calc(100%-2.5rem)] sm:w-auto"></div>
+
+  <!-- ==================== APPLICATION JAVASCRIPT ==================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* =========================================================================
+       * 1. BRAND METADATA & CONFIGURATION
+       * ========================================================================= */
+      const PLATFORMS = {
+        'Amazon India': {
+          short: 'Amazon',
+          dot: '#FF9900',
+          badgeBg: 'bg-[#131921] text-[#FF9900]',
+          accentHex: '#FF9900',
+          borderTint: 'border-amber-400/40'
+        },
+        'Flipkart': {
+          short: 'Flipkart',
+          dot: '#2874F0',
+          badgeBg: 'bg-[#2874F0] text-[#FFE500]',
+          accentHex: '#2874F0',
+          borderTint: 'border-blue-400/40'
+        },
+        'Meesho': {
+          short: 'Meesho',
+          dot: '#9F2089',
+          badgeBg: 'bg-[#9F2089] text-white',
+          accentHex: '#9F2089',
+          borderTint: 'border-fuchsia-400/40'
+        },
+        'Myntra': {
+          short: 'Myntra',
+          dot: '#FF3F6C',
+          badgeBg: 'bg-[#FF3F6C] text-white',
+          accentHex: '#FF3F6C',
+          borderTint: 'border-pink-400/40'
+        },
+        'AJIO': {
+          short: 'AJIO',
+          dot: '#2C4152',
+          badgeBg: 'bg-[#2C4152] text-white',
+          accentHex: '#2C4152',
+          borderTint: 'border-slate-500/40'
+        },
+        'Nykaa': {
+          short: 'Nykaa',
+          dot: '#FC2779',
+          badgeBg: 'bg-[#FC2779] text-white',
+          accentHex: '#FC2779',
+          borderTint: 'border-rose-400/40'
+        },
+        'Tata CLiQ': {
+          short: 'Tata CLiQ',
+          dot: '#DA1C5C',
+          badgeBg: 'bg-[#DA1C5C] text-white',
+          accentHex: '#DA1C5C',
+          borderTint: 'border-rose-500/40'
+        },
+        'Croma': {
+          short: 'Croma',
+          dot: '#00E9BF',
+          badgeBg: 'bg-[#0F2928] text-[#00E9BF]',
+          accentHex: '#00E9BF',
+          borderTint: 'border-teal-400/40'
+        }
+      };
+
+      const BANK_CARDS = [
+        { id: 'HDFC', label: 'HDFC Bank', color: '#004C8F' },
+        { id: 'SBI', label: 'SBI Card', color: '#292075' },
+        { id: 'ICICI', label: 'ICICI Bank', color: '#F37E20' },
+        { id: 'Axis', label: 'Axis Bank', color: '#97144D' },
+        { id: 'Kotak', label: 'Kotak Bank', color: '#ED1C24' },
+        { id: 'Amex', label: 'American Express', color: '#006FCF' },
+        { id: 'Amazon Pay ICICI', label: 'Amazon Pay ICICI', color: '#FF9900' },
+        { id: 'Flipkart Axis', label: 'Flipkart Axis', color: '#2874F0' }
+      ];
+
+      /* =========================================================================
+       * 2. COMPREHENSIVE SALE DATASET (22 VERIFIED ENTRIES FOR NOV 2026 - JAN 2027)
+       * ========================================================================= */
+      const SALES_DATA = [
+        // ---------- LIVE NOW (Nov 27, 2026) ----------
+        {
+          id: 'amz-bf-2026',
+          platform: 'Amazon India',
+          title: 'Black Friday Sale 2026',
+          status: 'live',
+          urgentBadge: '',
+          dateLabel: 'Live from Nov 27, 2026',
+          startDateISO: '2026-11-27',
+          endDateISO: '2026-11-30',
+          monthGroup: 'November 2026 — Live Now',
+          maxDiscountNum: 80,
+          discountLabel: 'Up to 80% Off',
+          categories: ['Smartphones & Tech', 'Appliances & TVs', 'Home & Kitchen', 'Fashion & Footwear'],
+          bankOffers: '10% Instant Discount on HDFC & Axis Bank Credit Cards, No-Cost EMI, Extra Prime savings',
+          banks: ['HDFC', 'Axis', 'Amazon Pay ICICI'],
+          highlights: 'Big price cuts on laptops, Echo/Kindle devices, kitchen appliances & international electronics.',
+          whatToBuy: [
+            'Laptops, monitors, SSDs & PC accessories',
+            'Amazon Echo, Fire TV Stick & Kindle bundles',
+            'Air fryers, robot vacuums & smart kitchen gear',
+            'Prime-exclusive lightning deals on headphones'
+          ],
+          proTips: [
+            'Combine HDFC/Axis 10% instant discount with clippable product page coupons.',
+            'If you hold Amazon Pay ICICI, compare 5% unlimited cashback vs. HDFC instant discount cap.',
+            'Buy laptops & accessories now; wait for Republic Day only if your target phone model isn’t discounted.'
+          ],
+          url: 'https://www.amazon.in'
+        },
+        {
+          id: 'fk-bf-2026',
+          platform: 'Flipkart',
+          title: 'Black Friday Sale 2026',
+          status: 'live',
+          urgentBadge: 'ENDS TODAY',
+          dateLabel: 'Nov 21 – Nov 27, 2026',
+          startDateISO: '2026-11-21',
+          endDateISO: '2026-11-27',
+          monthGroup: 'November 2026 — Live Now',
+          maxDiscountNum: 80,
+          discountLabel: 'Up to 80% Off',
+          categories: ['Smartphones & Tech', 'Appliances & TVs', 'Fashion & Footwear', 'Home & Kitchen'],
+          bankOffers: 'Extra instant discounts on Axis Bank & SBI Cards, Flipkart Pay Later',
+          banks: ['Axis', 'SBI', 'Flipkart Axis'],
+          highlights: 'Deals on iPhone, Samsung, Pixel, Vivo, 4K TVs & wireless earbuds — final hours before midnight!',
+          whatToBuy: [
+            'iPhone, Google Pixel, Samsung Galaxy & Vivo smartphones',
+            '4K QLED/LED Smart TVs with exchange bonuses',
+            'TWS earbuds, smartwatches & gaming peripherals',
+            'Large appliances with extra bank EMI discounts'
+          ],
+          proTips: [
+            'Sale closes at 11:59 PM IST tonight (Nov 27) — check final-hour SuperCoin coupon drops.',
+            'Verify old phone exchange valuation; Flipkart often adds extra ₹2,000–₹4,000 exchange bumps.',
+            'Flipkart Axis Bank Card gives 5% unlimited cashback if bank instant offer cap is reached.'
+          ],
+          url: 'https://www.flipkart.com'
+        },
+        {
+          id: 'myn-bf-2026',
+          platform: 'Myntra',
+          title: 'Black Friday Sale 2026',
+          status: 'live',
+          urgentBadge: '',
+          dateLabel: 'Nov 26 – Nov 30, 2026',
+          startDateISO: '2026-11-26',
+          endDateISO: '2026-11-30',
+          monthGroup: 'November 2026 — Live Now',
+          maxDiscountNum: 80,
+          discountLabel: '40%–80% Off',
+          categories: ['Fashion & Footwear', 'Beauty & Skincare'],
+          bankOffers: '10% off on ICICI & Axis Cards, Extra coupon savings',
+          banks: ['ICICI', 'Axis'],
+          highlights: 'H&M, Nike, Adidas, Puma winter wear, jackets & flagship sneakers on heavy markdowns.',
+          whatToBuy: [
+            'H&M, Mango & Marks & Spencer winter knitwear',
+            'Nike, Adidas, Puma & New Balance running sneakers',
+            'Premium perfumes & grooming gift sets',
+            'Denim, hoodies & formal blazers'
+          ],
+          proTips: [
+            'Popular sneaker sizes sell out before EORS in December — grab rare colorways now.',
+            'Apply Myntra brand coupons on top of ICICI/Axis 10% instant card discounts.',
+            'For bulk basic winter clothes, you can also compare with Myntra EORS starting Dec 5.'
+          ],
+          url: 'https://www.myntra.com'
+        },
+        {
+          id: 'ajio-bf-2026',
+          platform: 'AJIO',
+          title: 'Black Friday & Winter Carnival',
+          status: 'live',
+          urgentBadge: '',
+          dateLabel: 'Nov 27 – Nov 30, 2026',
+          startDateISO: '2026-11-27',
+          endDateISO: '2026-11-30',
+          monthGroup: 'November 2026 — Live Now',
+          maxDiscountNum: 80,
+          discountLabel: 'Up to 80% Off',
+          categories: ['Fashion & Footwear'],
+          bankOffers: 'Stackable AJIO coupons & select bank discounts (HDFC / ICICI / Axis)',
+          banks: ['HDFC', 'ICICI', 'Axis'],
+          highlights: 'International labels, Superdry, GAP, winter jackets & streetwear essentials.',
+          whatToBuy: [
+            'International labels: Superdry, GAP, Steve Madden & Replay',
+            'Heavy winter puffers, trench coats & boots',
+            'Streetwear oversized tees, cargos & denim',
+            'AJIO Luxe designer accessories'
+          ],
+          proTips: [
+            'Always check the cart coupon code (like BLACKFRIDAY / TREND) before checking out.',
+            'Minimum cart thresholds (₹2,999+) unlock the deepest flat coupon tiers on AJIO.',
+            'Watch out for convenience fees and verify return window on clearance items.'
+          ],
+          url: 'https://www.ajio.com'
+        },
+        {
+          id: 'nyk-pf-2026',
+          platform: 'Nykaa',
+          title: 'Pink Friday Sale 2026',
+          status: 'live',
+          urgentBadge: '',
+          dateLabel: 'Nov 21 – Dec 7, 2026',
+          startDateISO: '2026-11-21',
+          endDateISO: '2026-12-07',
+          monthGroup: 'November 2026 — Live Now',
+          maxDiscountNum: 70,
+          discountLabel: 'Up to 70% Off',
+          categories: ['Beauty & Skincare'],
+          bankOffers: 'Extra gift sets, brand freebies & prepaid bank offers (HDFC / ICICI)',
+          banks: ['HDFC', 'ICICI'],
+          highlights: 'Biggest annual beauty sale in India — international skincare, K-beauty & makeup launches.',
+          whatToBuy: [
+            'Buy 1 Get 1 & Buy 2 Get 1 deals on serums & sunscreens',
+            'Luxe makeup (MAC, Charlotte Tilbury, Estée Lauder) gift combos',
+            'Korean skincare restocks (COSRX, Laneige, Beauty of Joseon)',
+            'Haircare & fragrance holiday boxes'
+          ],
+          proTips: [
+            'This is the #1 beauty sale of the entire year — do not wait for Dec/Jan for skincare.',
+            'Check the "Free Gift on Cart" banner; splitting or combining orders can earn 2–3 freebies.',
+            'Nykaa Prive members get extra birthday/tier coupons stacked during Pink Friday.'
+          ],
+          url: 'https://www.nykaa.com'
+        },
+        {
+          id: 'tcliq-bf-2026',
+          platform: 'Tata CLiQ',
+          title: 'Black Friday Sale 2026',
+          status: 'live',
+          urgentBadge: '',
+          dateLabel: 'Nov 19 – Nov 30, 2026',
+          startDateISO: '2026-11-19',
+          endDateISO: '2026-11-30',
+          monthGroup: 'November 2026 — Live Now',
+          maxDiscountNum: 75,
+          discountLabel: 'Up to 75% Off',
+          categories: ['Fashion & Footwear', 'Beauty & Skincare', 'Home & Kitchen'],
+          bankOffers: '12.5% Instant Discount on Amex, Axis & Kotak Credit Cards',
+          banks: ['Amex', 'Axis', 'Kotak'],
+          highlights: 'Watches, luxury apparel, fine jewellery, designer handbags & authentic eyewear.',
+          whatToBuy: [
+            'Branded watches (Seiko, Tissot, Fossil, Titan Edge)',
+            'Ray-Ban, Oakley & Prada sunglasses',
+            'Tata CLiQ Luxury handbags & fine jewellery',
+            'Premium bedsheets & home decor sets'
+          ],
+          proTips: [
+            '12.5% instant discount on Amex, Axis & Kotak cards is higher than the standard 10% elsewhere.',
+            'Earn & burn Tata NeuCoins if you shop via the Tata Neu ecosystem.',
+            'Great place for authentic luxury watches with official brand warranties.'
+          ],
+          url: 'https://www.tatacliq.com'
+        },
+        {
+          id: 'croma-bf-2026',
+          platform: 'Croma',
+          title: 'Black Friday Tech Sale',
+          status: 'live',
+          urgentBadge: '',
+          dateLabel: 'Nov 26 – Nov 30, 2026',
+          startDateISO: '2026-11-26',
+          endDateISO: '2026-11-30',
+          monthGroup: 'November 2026 — Live Now',
+          maxDiscountNum: 65,
+          discountLabel: 'Up to 65% Off',
+          categories: ['Smartphones & Tech', 'Appliances & TVs'],
+          bankOffers: 'Bank EMI cashback (HDFC / ICICI / SBI) & exchange bonuses',
+          banks: ['HDFC', 'ICICI', 'SBI'],
+          highlights: 'Laptops, MacBooks, 4K TVs, inverter ACs, soundbars & flagship smartphones.',
+          whatToBuy: [
+            'Apple MacBooks, iPads & Windows creator laptops',
+            '55" & 65" 4K OLED/QLED Smart TVs',
+            'Off-season Inverter Split ACs & washing machines',
+            'Bose, Sony & Marshall home audio speakers'
+          ],
+          proTips: [
+            'Check store-pickup availability if you want same-day delivery & hands-on inspection.',
+            'Stack Tata NeuCoins + HDFC/ICICI instant EMI cashback for lowest net price on MacBooks.',
+            'Compare Croma’s ZipCare extended warranty bundle vs. AppleCare/brand warranty.'
+          ],
+          url: 'https://www.croma.com'
+        },
+
+        // ---------- UPCOMING SALES (Dec 2026 – Jan 2027) ----------
+        {
+          id: 'fk-buybuy-2026',
+          platform: 'Flipkart',
+          title: 'Buy Buy Sale 2026',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Expected Dec 5 – Dec 10, 2026',
+          startDateISO: '2026-12-05',
+          endDateISO: '2026-12-10',
+          monthGroup: 'December 2026 — Winter & Year-End',
+          maxDiscountNum: 75,
+          discountLabel: 'Up to 75% Off',
+          categories: ['Smartphones & Tech', 'Home & Kitchen', 'Fashion & Footwear'],
+          bankOffers: 'Expected 10% bank card discounts (HDFC / Axis / SBI) & SuperCoins offers',
+          banks: ['HDFC', 'Axis', 'SBI', 'Flipkart Axis'],
+          highlights: 'Early-December refresh sale on mid-range smartphones, home essentials & winter gear.',
+          whatToBuy: [
+            'Mid-range 5G smartphones under ₹25,000',
+            'Room heaters, geysers & winter home appliances',
+            'Kitchen storage, cookware & furniture',
+            'Budget wearables & power banks'
+          ],
+          proTips: [
+            'Ideal if you missed tonight’s Flipkart Black Friday smartphone deals.',
+            'Save SuperCoins ahead of Dec 5 to unlock extra ₹250–₹500 vouchers.'
+          ],
+          url: 'https://www.flipkart.com'
+        },
+        {
+          id: 'myn-eors-2026',
+          platform: 'Myntra',
+          title: 'Winter End of Reason Sale (EORS)',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Expected Dec 5 – Dec 15, 2026',
+          startDateISO: '2026-12-05',
+          endDateISO: '2026-12-15',
+          monthGroup: 'December 2026 — Winter & Year-End',
+          maxDiscountNum: 90,
+          discountLabel: 'Up to 90% Off',
+          categories: ['Fashion & Footwear', 'Beauty & Skincare'],
+          bankOffers: 'ICICI/Axis 10% off, 24h Insider Early Access & VIP Sale Pass',
+          banks: ['ICICI', 'Axis'],
+          highlights: 'Biggest winter clothing, coats, denim & sneakers clearance of the year.',
+          whatToBuy: [
+            'Winter coats, sweatshirts, boots & thermal wear',
+            'Up to 70%–80% off Levi’s, Roadster, Wrogn & Jack & Jones',
+            'Running shoes & lifestyle sneakers from top brands',
+            'Everyday makeup & fragrance combos'
+          ],
+          proTips: [
+            'Buy the ₹1 / low-cost VIP Early Access Pass 2 days prior to beat size stockouts.',
+            'Add items to your wishlist by Dec 3 to watch price drops go live at midnight.',
+            'Midnight (12 AM – 2 AM) OMG Deals usually feature the deepest brand-specific markdowns.'
+          ],
+          url: 'https://www.myntra.com'
+        },
+        {
+          id: 'mee-sunday-dec2026',
+          platform: 'Meesho',
+          title: 'First Sunday Maha Sale',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Dec 6, 2026',
+          startDateISO: '2026-12-06',
+          endDateISO: '2026-12-06',
+          monthGroup: 'December 2026 — Winter & Year-End',
+          maxDiscountNum: 70,
+          discountLabel: 'Up to 70% Off',
+          categories: ['Budget & Value Deals', 'Home & Kitchen', 'Fashion & Footwear'],
+          bankOffers: 'Extra 25% off first order, ₹9 flash deals, Free delivery on select items',
+          banks: [],
+          highlights: 'Budget ethnic wear, home décor, kitchen storage & organizers starting from ₹99.',
+          whatToBuy: [
+            'Kurtis, sarees & winter shawls under ₹499',
+            'Kitchen containers, organizers & wall décor',
+            '₹9 & ₹49 hourly flash deal drops',
+            'Phone covers, jewelry & everyday accessories'
+          ],
+          proTips: [
+            '₹9 flash deals sell out in seconds — keep your shipping address & UPI ready before the hour strikes.',
+            'Filter by 4.0+ star products and check real customer uploaded photos before ordering.',
+            'Opt for "Wrong/Defective Return" pricing only if you are 100% sure of sizing.'
+          ],
+          url: 'https://www.meesho.com'
+        },
+        {
+          id: 'fk-eoss-2026',
+          platform: 'Flipkart',
+          title: 'Winter End of Season Sale (EOSS)',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Expected Dec 12 – Dec 21, 2026',
+          startDateISO: '2026-12-12',
+          endDateISO: '2026-12-21',
+          monthGroup: 'December 2026 — Winter & Year-End',
+          maxDiscountNum: 80,
+          discountLabel: 'Up to 80% Off',
+          categories: ['Fashion & Footwear', 'Home & Kitchen'],
+          bankOffers: 'Prepaid extra discounts & Flipkart Axis Card 5% cashback',
+          banks: ['Flipkart Axis', 'Axis'],
+          highlights: 'Winter apparel, footwear, luggage & lifestyle clearance across 1,000+ brands.',
+          whatToBuy: [
+            'Puma, Reebok & Campus footwear combos',
+            'Trolley bags, backpacks & winter travel gear',
+            'Blankets, quilts & bed linen sets',
+            'Casual jackets & kids winter clothing'
+          ],
+          proTips: [
+            'Compare sneaker prices between Myntra EORS and Flipkart EOSS — Flipkart often wins on Buy 2 Get Extra 15% Off.',
+            'Use Flipkart Axis Bank Credit Card for flat 5% cashback without minimum order hassles.'
+          ],
+          url: 'https://www.flipkart.com'
+        },
+        {
+          id: 'amz-xmas-2026',
+          platform: 'Amazon India',
+          title: 'Christmas Sale 2026',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Expected Dec 18 – Dec 25, 2026',
+          startDateISO: '2026-12-18',
+          endDateISO: '2026-12-25',
+          monthGroup: 'December 2026 — Winter & Year-End',
+          maxDiscountNum: 70,
+          discountLabel: 'Up to 70% Off',
+          categories: ['Smartphones & Tech', 'Home & Kitchen', 'Fashion & Footwear'],
+          bankOffers: 'Expected SBI/HDFC bank offers & Amazon Pay ICICI 5% cashback',
+          banks: ['SBI', 'HDFC', 'Amazon Pay ICICI'],
+          highlights: 'Headphones & TWS (Sony, JBL, Bose), Secret Santa gifting bundles & Echo devices.',
+          whatToBuy: [
+            'Sony, Bose & JBL ANC headphones & Bluetooth speakers',
+            'Christmas trees, fairy lights & baking essentials',
+            'Smartwatches & Secret Santa gifts under ₹1,000',
+            'Coffee makers, Echo Pop & Kindle gift bundles'
+          ],
+          proTips: [
+            'Audio gear sees some of its best discounts of Q4 during Amazon’s Christmas audio fest.',
+            'Check Amazon Gift Card cashback offers if you plan to gift vouchers.'
+          ],
+          url: 'https://www.amazon.in'
+        },
+        {
+          id: 'ajio-bigbold-2026',
+          platform: 'AJIO',
+          title: 'Big Bold Year-End Sale',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Expected Dec 20 – Dec 31, 2026',
+          startDateISO: '2026-12-20',
+          endDateISO: '2026-12-31',
+          monthGroup: 'December 2026 — Winter & Year-End',
+          maxDiscountNum: 90,
+          discountLabel: 'Up to 90% Off',
+          categories: ['Fashion & Footwear'],
+          bankOffers: 'Stackable coupons, AJIO Wallet savings & select ICICI/HDFC bank discounts',
+          banks: ['ICICI', 'HDFC'],
+          highlights: 'Deepest Q4 markdowns on designer, streetwear & international fashion labels.',
+          whatToBuy: [
+            'High-discount international brands (50%–90% off)',
+            'Party wear & New Year’s Eve outfits',
+            'Branded denim, boots & leather jackets',
+            'Athleisure & gym wear packs'
+          ],
+          proTips: [
+            'Big Bold Sale typically beats Black Friday pricing on AJIO by an extra 10%–15% on older season stock.',
+            'Stack brand markdowns with flat cart coupons and bank card checkout offers.'
+          ],
+          url: 'https://www.ajio.com'
+        },
+        {
+          id: 'amz-yearend-2026',
+          platform: 'Amazon India',
+          title: 'End of Season & Year-End Sale',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Expected Dec 26 – Dec 31, 2026',
+          startDateISO: '2026-12-26',
+          endDateISO: '2026-12-31',
+          monthGroup: 'December 2026 — Winter & Year-End',
+          maxDiscountNum: 70,
+          discountLabel: 'Up to 70% Off',
+          categories: ['Smartphones & Tech', 'Appliances & TVs', 'Home & Kitchen'],
+          bankOffers: 'Amazon Pay ICICI 5% cashback, No-Cost EMI, Gift Card discounts',
+          banks: ['Amazon Pay ICICI', 'HDFC'],
+          highlights: 'Post-festive clearance across electronics, smart home gadgets & home appliances.',
+          whatToBuy: [
+            '2026 model TVs, washing machines & refrigerators on clearance',
+            'Fitness trackers, tablets & routers',
+            'Home & kitchen upgrades before New Year',
+            'Travel luggage & winter bedding'
+          ],
+          proTips: [
+            'Great time for home appliances, though flagship smartphones may see deeper cuts 3 weeks later in Republic Day Sale.',
+            'Look for No-Cost EMI deals where Amazon absorbs the interest upfront.'
+          ],
+          url: 'https://www.amazon.in'
+        },
+        {
+          id: 'fk-yearend-2026',
+          platform: 'Flipkart',
+          title: 'Christmas & Year-End Mega Sale',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Expected Dec 26, 2026 – Jan 2, 2027',
+          startDateISO: '2026-12-26',
+          endDateISO: '2027-01-02',
+          monthGroup: 'December 2026 — Winter & Year-End',
+          maxDiscountNum: 80,
+          discountLabel: 'Up to 80% Off',
+          categories: ['Smartphones & Tech', 'Appliances & TVs', 'Fashion & Footwear'],
+          bankOffers: 'Bank card instant discounts (Axis / ICICI) & exchange deals',
+          banks: ['Axis', 'ICICI', 'Flipkart Axis'],
+          highlights: 'Year-end inventory clearance across electronics, appliances & New Year gifting.',
+          whatToBuy: [
+            '2026 laptops & gaming monitors on year-end stock clearance',
+            'Smart TVs, soundbars & microwaves',
+            'Party wear & winter clearance fashion',
+            'Exchange deals on budget & mid-range phones'
+          ],
+          proTips: [
+            'Compare laptop deals here vs. waiting for Jan 17 Republic Day Sale if you aren’t in a rush.',
+            'Check open-box delivery option on high-value electronics for peace of mind.'
+          ],
+          url: 'https://www.flipkart.com'
+        },
+        {
+          id: 'mee-yearend-2026',
+          platform: 'Meesho',
+          title: 'Year-End Maha Clearance Sale',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Expected Dec 26 – Dec 31, 2026',
+          startDateISO: '2026-12-26',
+          endDateISO: '2026-12-31',
+          monthGroup: 'December 2026 — Winter & Year-End',
+          maxDiscountNum: 80,
+          discountLabel: 'Up to 80% Off',
+          categories: ['Budget & Value Deals', 'Home & Kitchen', 'Fashion & Footwear'],
+          bankOffers: 'UPI cashback & zero-commission lowest prices',
+          banks: [],
+          highlights: 'Winter wear, cookware, bedsheets & budget accessories under ₹299.',
+          whatToBuy: [
+            'Sweaters, hoodies & woollen socks under ₹299',
+            'Budget cookware, storage racks & organizers',
+            'New Year party décor & fairy lights',
+            'Affordable ethnic wear & jewelry sets'
+          ],
+          proTips: [
+            'Use UPI payment options during checkout for extra ₹20–₹50 instant savings.',
+            'Check Meesho Mall badge if you want branded budget items with assured quality.'
+          ],
+          url: 'https://www.meesho.com'
+        },
+        {
+          id: 'amz-repday-2027',
+          platform: 'Amazon India',
+          title: 'Great Republic Day Sale 2027',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Expected Jan 16 – Jan 25, 2027',
+          startDateISO: '2027-01-16',
+          endDateISO: '2027-01-25',
+          monthGroup: 'January 2027 — Republic Day Mega Sales',
+          maxDiscountNum: 80,
+          discountLabel: 'Up to 80% Off',
+          categories: ['Smartphones & Tech', 'Appliances & TVs', 'Home & Kitchen'],
+          bankOffers: 'SBI Credit Card 10% instant discount, Prime 24h Early Access',
+          banks: ['SBI', 'Amazon Pay ICICI'],
+          highlights: 'First mega electronics & smartphone sale of 2027 with Prime 24-hour early access.',
+          whatToBuy: [
+            'OnePlus, Samsung, iQOO & Apple smartphones',
+            'Split ACs (best pre-summer prices of 2027)',
+            'Laptops, tablets & 4K Smart TVs',
+            'Amazon devices & smart home bundles'
+          ],
+          proTips: [
+            'Keep an SBI Credit Card ready — Amazon traditionally partners with SBI for Republic Day.',
+            'Prime members get 24h early access where top smartphone deals have full stock.',
+            'One of the top 3 sales of the year alongside Prime Day and Great Indian Festival.'
+          ],
+          url: 'https://www.amazon.in'
+        },
+        {
+          id: 'fk-repday-2027',
+          platform: 'Flipkart',
+          title: 'Republic Day Sale 2027',
+          status: 'upcoming',
+          urgentBadge: '',
+          dateLabel: 'Expected Jan 17 – Jan 22, 2027',
+          startDateISO: '2027-01-17',
+          endDateISO: '2027-01-22',
+          monthGroup: 'January 2027 — Republic Day Mega Sales',
+          maxDiscountNum: 80,
+          discountLabel: 'Up to 80% Off',
+          categories: ['Smartphones & Tech', 'Appliances & TVs', 'Fashion & Footwear'],
+          bankOffers: 'HDFC/ICICI bank offers & Flipkart Plus Early Access',
+          banks: ['HDFC', 'ICICI', 'Flipkart Axis'],
+          highlights: 'Major price drops on flagship phones, gaming laptops & large home appliances.',
+          whatToBuy: [
+            'iPhone, Pixel, Nothing & Motorola smartphones',
+            'Gaming laptops & MacBooks',
+            'Refrigerators, washing machines & ACs',
+            'Branded footwear & winter final clearance'
+          ],
+          proTips: [
+            'Flipkart Plus / VIP members get 24h early access — check your Plus status in early January.',
+            'Watch out for "Rush Hour" deals between 12 AM and 2 AM on Day 1 for lowest phone prices.'
+          ],
+          url: 'https://www.flipkart.com'
+        },
+
+        // ---------- PAST 2026 FLAGSHIP ARCHIVE (Reference) ----------
+        {
+          id: 'amz-gif-2026',
+          platform: 'Amazon India',
+          title: 'Great Indian Festival 2026',
+          status: 'ended',
+          urgentBadge: '',
+          dateLabel: 'Oct 8 – Nov 8, 2026 (Ended)',
+          startDateISO: '2026-10-08',
+          endDateISO: '2026-11-08',
+          monthGroup: 'Past 2026 Flagship Archive (Reference)',
+          maxDiscountNum: 80,
+          discountLabel: 'Up to 80% Off',
+          categories: ['Smartphones & Tech', 'Appliances & TVs', 'Fashion & Footwear', 'Home & Kitchen'],
+          bankOffers: '10% SBI Card discount, Prime Early Access',
+          banks: ['SBI', 'Amazon Pay ICICI'],
+          highlights: 'Amazon India’s flagship Diwali mega sale — next edition expected Oct 2027.',
+          whatToBuy: [
+            'Flagship smartphones & laptops (annual lowest prices)',
+            'Large appliances, TVs & kitchen essentials',
+            'Festive gifting & Echo smart speakers'
+          ],
+          proTips: [
+            'Reference benchmark: Great Republic Day Sale (Jan 2027) is the next closest mega electronics event.',
+            'SBI Credit/Debit cards are historically Amazon’s primary festive bank partner.'
+          ],
+          url: 'https://www.amazon.in'
+        },
+        {
+          id: 'fk-bbd-2026',
+          platform: 'Flipkart',
+          title: 'Big Billion Days 2026',
+          status: 'ended',
+          urgentBadge: '',
+          dateLabel: 'Oct 8 – Oct 18, 2026 (Ended)',
+          startDateISO: '2026-10-08',
+          endDateISO: '2026-10-18',
+          monthGroup: 'Past 2026 Flagship Archive (Reference)',
+          maxDiscountNum: 90,
+          discountLabel: 'Up to 90% Off',
+          categories: ['Smartphones & Tech', 'Appliances & TVs', 'Fashion & Footwear'],
+          bankOffers: '10% Axis & ICICI Bank discount',
+          banks: ['Axis', 'ICICI', 'Flipkart Axis'],
+          highlights: 'Flipkart’s biggest annual sale — record-low iPhone & Samsung drops (next expected Oct 2027).',
+          whatToBuy: [
+            'Previous-gen iPhones & Samsung S-series flagships',
+            'TVs, appliances & fashion steals'
+          ],
+          proTips: [
+            'Reference benchmark: Use Flipkart Black Friday (ends tonight!) or Republic Day Sale (Jan 2027) for the next big drop.'
+          ],
+          url: 'https://www.flipkart.com'
+        },
+        {
+          id: 'mee-mbs-2026',
+          platform: 'Meesho',
+          title: 'Mega Blockbuster Sale 2026',
+          status: 'ended',
+          urgentBadge: '',
+          dateLabel: 'Oct 2026 (Ended)',
+          startDateISO: '2026-10-06',
+          endDateISO: '2026-10-15',
+          monthGroup: 'Past 2026 Flagship Archive (Reference)',
+          maxDiscountNum: 80,
+          discountLabel: 'Up to 80% Off',
+          categories: ['Budget & Value Deals', 'Home & Kitchen', 'Fashion & Footwear'],
+          bankOffers: '₹9 flash deals & bank UPI offers',
+          banks: [],
+          highlights: 'Meesho’s annual Diwali mega event — next major Meesho sale is First Sunday Maha Sale on Dec 6.',
+          whatToBuy: [
+            'Festive ethnic wear, home décor & budget kitchenware'
+          ],
+          proTips: [
+            'Don’t wait a full year — Meesho’s First Sunday Maha Sale (Dec 6) & Year-End Clearance (Dec 26) offer similar flash deals.'
+          ],
+          url: 'https://www.meesho.com'
+        },
+        {
+          id: 'myn-bff-2026',
+          platform: 'Myntra',
+          title: 'Big Fashion Festival 2026',
+          status: 'ended',
+          urgentBadge: '',
+          dateLabel: 'Oct 8 – Nov 8, 2026 (Ended)',
+          startDateISO: '2026-10-08',
+          endDateISO: '2026-11-08',
+          monthGroup: 'Past 2026 Flagship Archive (Reference)',
+          maxDiscountNum: 90,
+          discountLabel: 'Up to 90% Off',
+          categories: ['Fashion & Footwear', 'Beauty & Skincare'],
+          bankOffers: '10% bank discount & Insider perks',
+          banks: ['ICICI', 'Kotak'],
+          highlights: 'Myntra’s Diwali fashion carnival — replaced now by Black Friday (Live) & Winter EORS (Dec 5).',
+          whatToBuy: [
+            'Festive ethnic wear, party footwear & watches'
+          ],
+          proTips: [
+            'Myntra Winter EORS starting Dec 5 matches or beats Big Fashion Festival discounts on winter apparel & sneakers.'
+          ],
+          url: 'https://www.myntra.com'
+        }
+      ];
+
+      /* =========================================================================
+       * 3. APPLICATION STATE & PERSISTENCE (localStorage with safe try/catch)
+       * ========================================================================= */
+      const STORAGE_KEYS = {
+        REMINDERS: 'saleradar_reminders_v1',
+        NOTES: 'saleradar_custom_notes_v1',
+        THEME: 'saleradar_theme_v1'
+      };
+
+      function safeReadStorage(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (err) {
+          return fallback;
+        }
+      }
+
+      function safeWriteStorage(key, value) {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+        } catch (err) {
+          // Silently handle storage quota or sandbox restrictions
+        }
+      }
+
+      const state = {
+        activeView: 'sales', // 'sales' | 'calendar' | 'tools'
+        searchQuery: '',
+        selectedPlatform: 'All',
+        selectedStatus: 'all', // 'all' | 'live' | 'upcoming' | 'ended'
+        selectedCategory: 'all',
+        sortBy: 'priority', // 'priority' | 'discount' | 'date'
+        selectedBanks: [],
+        reminders: safeReadStorage(STORAGE_KEYS.REMINDERS, []), // array of sale IDs
+        customNotes: safeReadStorage(STORAGE_KEYS.NOTES, []), // array of { id, text, done }
+        activeModalSaleId: null
+      };
+
+      /* =========================================================================
+       * 4. UTILITY HELPERS (Sanitization, Formatting, Toast, ICS Generator)
+       * ========================================================================= */
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function formatINR(num) {
+        const rounded = Math.round(Number(num) || 0);
+        return '₹' + rounded.toLocaleString('en-IN');
+      }
+
+      // Show a clean, non-blocking toast message (never uses alert/confirm)
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        const styles = {
+          success: 'bg-emerald-600 text-white border-emerald-500',
+          info: 'bg-slate-900 dark:bg-slate-800 text-white border-slate-700',
+          warning: 'bg-amber-600 text-white border-amber-500'
+        };
+        toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold shadow-xl border ${styles[type] || styles.info} transform transition-all duration-300 translate-y-2 opacity-0`;
+        toast.innerHTML = `
+          <span class="shrink-0">
+            ${type === 'success'
+              ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>'
+              : '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+            }
+          </span>
+          <span>${escapeHtml(message)}</span>
+        `;
+        container.appendChild(toast);
+
+        requestAnimationFrame(() => {
+          toast.classList.remove('translate-y-2', 'opacity-0');
+        });
+
+        setTimeout(() => {
+          toast.classList.add('translate-y-2', 'opacity-0');
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+
+      // Generate & download a genuine RFC 5545 .ics calendar file for a sale
+      function downloadSaleICS(sale) {
+        try {
+          const cleanDate = (iso) => iso.replace(/-/g, '');
+          // Add 1 day to DTEND because all-day ICS events have exclusive end dates
+          const endDateObj = new Date(sale.endDateISO + 'T00:00:00');
+          endDateObj.setDate(endDateObj.getDate() + 1);
+          const endExclusive = endDateObj.toISOString().slice(0, 10).replace(/-/g, '');
+
+          const nowStamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+          const safeDesc = `${sale.discountLabel} | Bank Offers: ${sale.bankOffers} | Highlights: ${sale.highlights} | Store: ${sale.url}`
+            .replace(/,/g, '\\,')
+            .replace(/;/g, '\\;')
+            .replace(/\n/g, '\\n');
+
+          const icsContent = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//SaleRadar India//Sale Tracker//EN',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH',
+            'BEGIN:VEVENT',
+            `UID:${sale.id}@saleradar.in`,
+            `DTSTAMP:${nowStamp}`,
+            `DTSTART;VALUE=DATE:${cleanDate(sale.startDateISO)}`,
+            `DTEND;VALUE=DATE:${endExclusive}`,
+            `SUMMARY:${sale.platform} - ${sale.title} (${sale.discountLabel})`,
+            `DESCRIPTION:${safeDesc}`,
+            `URL:${sale.url}`,
+            'BEGIN:VALARM',
+            'TRIGGER:-PT12H',
+            'ACTION:DISPLAY',
+            `DESCRIPTION:Reminder: ${sale.platform} ${sale.title} starts soon!`,
+            'END:VALARM',
+            'END:VEVENT',
+            'END:VCALENDAR'
+          ].join('\r\n');
+
+          const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+          const blobUrl = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = `SaleRadar-${sale.id}.ics`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+
+          showToast(`Calendar invite (.ics) downloaded for ${sale.platform}!`, 'success');
+        } catch (err) {
+          showToast('Could not generate calendar file in this browser.', 'warning');
+        }
+      }
+
+      /* =========================================================================
+       * 5. THEME MANAGEMENT (LIGHT / DARK MODE)
+       * ========================================================================= */
+      function initTheme() {
+        const saved = safeReadStorage(STORAGE_KEYS.THEME, null);
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = saved ? saved === 'dark' : prefersDark;
+        document.documentElement.classList.toggle('dark', isDark);
+      }
+
+      function toggleTheme() {
+        const isDark = document.documentElement.classList.toggle('dark');
+        safeWriteStorage(STORAGE_KEYS.THEME, isDark ? 'dark' : 'light');
+        showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled', 'info');
+      }
+
+      /* =========================================================================
+       * 6. REAL-TIME COUNTDOWN TIMER (FLIPKART BLACK FRIDAY ENDS 11:59 PM IST)
+       * ========================================================================= */
+      function startCountdownTimer() {
+        const hoursEl = document.getElementById('cdHours');
+        const minsEl = document.getElementById('cdMins');
+        const secsEl = document.getElementById('cdSecs');
+
+        function updateTick() {
+          try {
+            // Get current time-of-day in India Standard Time (Asia/Kolkata, UTC+5:30)
+            const now = new Date();
+            const istString = now.toLocaleTimeString('en-GB', {
+              timeZone: 'Asia/Kolkata',
+              hour12: false,
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            });
+            const [h, m, s] = istString.split(':').map(Number);
+            const secondsElapsedToday = (h * 3600) + (m * 60) + s;
+            const endOfDaySeconds = (23 * 3600) + (59 * 60) + 59;
+            let remaining = endOfDaySeconds - secondsElapsedToday;
+            if (remaining < 0) remaining = 0;
+
+            const remH = Math.floor(remaining / 3600);
+            const remM = Math.floor((remaining % 3600) / 60);
+            const remS = remaining % 60;
+
+            hoursEl.textContent = String(remH).padStart(2, '0');
+            minsEl.textContent = String(remM).padStart(2, '0');
+            secsEl.textContent = String(remS).padStart(2, '0');
+          } catch (err) {
+            // Fallback using local UTC+5:30 offset calculation
+            const nowUtc = Date.now() + (new Date().getTimezoneOffset() * 60000);
+            const istNow = new Date(nowUtc + (5.5 * 3600000));
+            const rem = (23 * 3600 + 59 * 60 + 59) - (istNow.getHours() * 3600 + istNow.getMinutes() * 60 + istNow.getSeconds());
+            const safeRem = Math.max(0, rem);
+            hoursEl.textContent = String(Math.floor(safeRem / 3600)).padStart(2, '0');
+            minsEl.textContent = String(Math.floor((safeRem % 3600) / 60)).padStart(2, '0');
+            secsEl.textContent = String(safeRem % 60).padStart(2, '0');
+          }
+        }
+
+        updateTick();
+        setInterval(updateTick, 1000);
+      }
+
+      /* =========================================================================
+       * 7. FILTERING, SEARCHING & SORTING ENGINE
+       * ========================================================================= */
+      function getFilteredSales() {
+        const q = state.searchQuery.trim().toLowerCase();
+
+        const filtered = SALES_DATA.filter((sale) => {
+          // Platform filter
+          if (state.selectedPlatform !== 'All' && sale.platform !== state.selectedPlatform) {
+            return false;
+          }
+          // Status filter
+          if (state.selectedStatus !== 'all' && sale.status !== state.selectedStatus) {
+            return false;
+          }
+          // Category filter
+          if (state.selectedCategory !== 'all' && !sale.categories.includes(state.selectedCategory)) {
+            return false;
+          }
+          // Global Search query (matches platform, title, category, bank offers, highlights, whatToBuy)
+          if (q) {
+            const haystack = [
+              sale.platform,
+              PLATFORMS[sale.platform]?.short || '',
+              sale.title,
+              sale.dateLabel,
+              sale.discountLabel,
+              sale.bankOffers,
+              sale.highlights,
+              sale.categories.join(' '),
+              sale.whatToBuy.join(' '),
+              sale.banks.join(' ')
+            ].join(' ').toLowerCase();
+            if (!haystack.includes(q)) return false;
+          }
+          return true;
+        });
+
+        // Sort results
+        const statusRank = { live: 0, upcoming: 1, ended: 2 };
+        filtered.sort((a, b) => {
+          if (state.sortBy === 'discount') {
+            if (b.maxDiscountNum !== a.maxDiscountNum) return b.maxDiscountNum - a.maxDiscountNum;
+            return statusRank[a.status] - statusRank[b.status];
+          }
+          if (state.sortBy === 'date') {
+            return a.startDateISO.localeCompare(b.startDateISO);
+          }
+          // Default: Priority (Live First, with ENDS TODAY on top, then chronological Upcoming, then Archive)
+          if (statusRank[a.status] !== statusRank[b.status]) {
+            return statusRank[a.status] - statusRank[b.status];
+          }
+          if (a.urgentBadge && !b.urgentBadge) return -1;
+          if (!a.urgentBadge && b.urgentBadge) return 1;
+          return a.startDateISO.localeCompare(b.startDateISO);
+        });
+
+        return filtered;
+      }
+
+      /* =========================================================================
+       * 8. RENDERING FUNCTIONS — VIEW 1: ALL SALES
+       * ========================================================================= */
+      function renderHeroStats() {
+        const liveCount = SALES_DATA.filter((s) => s.status === 'live').length;
+        const upcomingCount = SALES_DATA.filter((s) => s.status === 'upcoming').length;
+        document.getElementById('statLiveCount').textContent = liveCount;
+        document.getElementById('statUpcomingCount').textContent = upcomingCount;
+        document.getElementById('heroLiveBtnCount').textContent = liveCount;
+      }
+
+      function renderPlatformPills() {
+        const container = document.getElementById('platformPillsContainer');
+        const platformNames = ['All', ...Object.keys(PLATFORMS)];
+
+        container.innerHTML = platformNames.map((name) => {
+          const isAll = name === 'All';
+          const count = isAll ? SALES_DATA.length : SALES_DATA.filter((s) => s.platform === name).length;
+          const isActive = state.selectedPlatform === name;
+          const meta = PLATFORMS[name];
+          const label = isAll ? 'All Apps' : meta.short;
+
+          return `
+            <button
+              type="button"
+              data-platform="${escapeHtml(name)}"
+              class="platform-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap border transition cursor-pointer ${
+                isActive
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white shadow-sm'
+                  : 'bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }"
+            >
+              ${!isAll ? `<span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color:${meta.dot}"></span>` : ''}
+              <span>${escapeHtml(label)}</span>
+              <span class="text-[11px] px-1.5 py-0.5 rounded-full ${
+                isActive
+                  ? 'bg-white/20 dark:bg-slate-900/15 text-current'
+                  : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+              }">${count}</span>
+            </button>
+          `;
+        }).join('');
+      }
+
+      function updateStatusButtonsUI() {
+        document.querySelectorAll('.status-btn').forEach((btn) => {
+          const isActive = btn.dataset.status === state.selectedStatus;
+          if (isActive) {
+            btn.className = 'status-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white shadow-sm transition cursor-pointer';
+          } else {
+            btn.className = 'status-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer';
+          }
+        });
+      }
+
+      function renderStatusPillHTML(sale) {
+        if (sale.status === 'live') {
+          return `
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              LIVE NOW
+            </span>
+          `;
+        }
+        if (sale.status === 'upcoming') {
+          return `
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-sky-50 dark:bg-sky-950/70 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
+              UPCOMING
+            </span>
+          `;
+        }
+        return `
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+            ENDED 2026
+          </span>
+        `;
+      }
+
+      function renderSalesGrid() {
+        const grid = document.getElementById('salesGrid');
+        const emptyState = document.getElementById('salesEmptyState');
+        const summary = document.getElementById('resultsSummaryText');
+        const resetBtn = document.getElementById('resetAllFiltersBtn');
+
+        const sales = getFilteredSales();
+
+        // Show/hide reset button if any filter is active
+        const hasFilters =
+          state.selectedPlatform !== 'All' ||
+          state.selectedStatus !== 'all' ||
+          state.selectedCategory !== 'all' ||
+          state.searchQuery.trim() !== '';
+        resetBtn.classList.toggle('hidden', !hasFilters);
+
+        summary.textContent = `Showing ${sales.length} of ${SALES_DATA.length} sales${state.searchQuery.trim() ? ` for "${state.searchQuery.trim()}"` : ''}`;
+
+        if (sales.length === 0) {
+          grid.innerHTML = '';
+          emptyState.classList.remove('hidden');
+          return;
+        }
+        emptyState.classList.add('hidden');
+
+        grid.innerHTML = sales.map((sale) => {
+          const brand = PLATFORMS[sale.platform];
+          const isSaved = state.reminders.includes(sale.id);
+          const isEnded = sale.status === 'ended';
+
+          return `
+            <article class="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 overflow-hidden ${isEnded ? 'opacity-80' : ''}">
+              <!-- Top Brand Color Bar -->
+              <div class="h-1.5 w-full" style="background-color: ${brand.accentHex}"></div>
+
+              <div class="p-5 flex-1 flex flex-col gap-3.5">
+                <!-- Header Row: Platform Badge + Status -->
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold tracking-tight ${brand.badgeBg}">
+                    ${escapeHtml(sale.platform)}
+                  </span>
+                  <div class="flex items-center gap-1.5">
+                    ${sale.urgentBadge ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide bg-rose-600 text-white animate-pulse">${escapeHtml(sale.urgentBadge)}</span>` : ''}
+                    ${renderStatusPillHTML(sale)}
+                  </div>
+                </div>
+
+                <!-- Title & Dates -->
+                <div>
+                  <h3 class="text-lg font-extrabold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
+                    ${escapeHtml(sale.title)}
+                  </h3>
+                  <div class="mt-1.5 flex items-center justify-between gap-2 flex-wrap">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                      <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      ${escapeHtml(sale.dateLabel)}
+                    </span>
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-amber-100/90 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200">
+                      ${escapeHtml(sale.discountLabel)}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Highlights -->
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-2">
+                  ${escapeHtml(sale.highlights)}
+                </p>
+
+                <!-- Category Tags -->
+                <div class="flex flex-wrap gap-1.5">
+                  ${sale.categories.map((cat) => `
+                    <span class="px-2.5 py-0.5 rounded-lg text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                      ${escapeHtml(cat)}
+                    </span>
+                  `).join('')}
+                </div>
+
+                <!-- Bank Offer Strip -->
+                <div class="mt-auto pt-1">
+                  <div class="rounded-xl p-2.5 bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 flex items-start gap-2">
+                    <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                      <line x1="2" y1="10" x2="22" y2="10"></line>
+                    </svg>
+                    <p class="text-[11px] sm:text-xs font-medium text-indigo-950 dark:text-indigo-200 leading-snug">
+                      ${escapeHtml(sale.bankOffers)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card Footer Action Buttons -->
+              <div class="px-5 py-3.5 bg-slate-50/80 dark:bg-slate-800/40 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                <button
+                  type="button"
+                  data-action="remind"
+                  data-sale-id="${sale.id}"
+                  class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition cursor-pointer ${
+                    isSaved
+                      ? 'bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700'
+                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }"
+                >
+                  <svg class="w-3.5 h-3.5" fill="${isSaved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                  <span>${isSaved ? 'Saved' : 'Remind Me'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  data-action="details"
+                  data-sale-id="${sale.id}"
+                  class="px-3 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition cursor-pointer"
+                >
+                  Details
+                </button>
+
+                <a
+                  href="${sale.url}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 transition whitespace-nowrap"
+                >
+                  Visit ↗
+                </a>
+              </div>
+            </article>
+          `;
+        }).join('');
+      }
+
+      /* =========================================================================
+       * 9. RENDERING FUNCTIONS — VIEW 2: CALENDAR TIMELINE
+       * ========================================================================= */
+      function renderCalendarTimeline() {
+        const container = document.getElementById('calendarTimelineContainer');
+        const groups = [
+          'November 2026 — Live Now',
+          'December 2026 — Winter & Year-End',
+          'January 2027 — Republic Day Mega Sales',
+          'Past 2026 Flagship Archive (Reference)'
+        ];
+
+        container.innerHTML = groups.map((groupName) => {
+          const items = SALES_DATA
+            .filter((s) => s.monthGroup === groupName)
+            .sort((a, b) => a.startDateISO.localeCompare(b.startDateISO));
+
+          const isLiveGroup = groupName.includes('Live Now');
+
+          return `
+            <div class="space-y-4">
+              <div class="flex items-center gap-3">
+                <div class="w-3 h-3 rounded-full ${isLiveGroup ? 'bg-emerald-500 ring-4 ring-emerald-500/20' : groupName.includes('Archive') ? 'bg-slate-400' : 'bg-indigo-500 ring-4 ring-indigo-500/20'}"></div>
+                <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">${escapeHtml(groupName)}</h3>
+                <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-300">${items.length} sales</span>
+              </div>
+
+              <div class="ml-1.5 pl-6 border-l-2 border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+                ${items.map((sale) => {
+                  const brand = PLATFORMS[sale.platform];
+                  const isSaved = state.reminders.includes(sale.id);
+                  return `
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-card hover:shadow-card-hover transition flex flex-col justify-between gap-3">
+                      <div class="space-y-2">
+                        <div class="flex items-center justify-between gap-2 flex-wrap">
+                          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-extrabold ${brand.badgeBg}">
+                            ${escapeHtml(sale.platform)}
+                          </span>
+                          <div class="flex items-center gap-1.5">
+                            ${sale.urgentBadge ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-600 text-white">${escapeHtml(sale.urgentBadge)}</span>` : ''}
+                            <span class="text-xs font-bold text-amber-700 dark:text-amber-300 bg-amber-100/80 dark:bg-amber-900/40 px-2 py-0.5 rounded-lg">${escapeHtml(sale.discountLabel)}</span>
+                          </div>
+                        </div>
+
+                        <h4 class="text-base font-extrabold text-slate-900 dark:text-white">${escapeHtml(sale.title)}</h4>
+                        <p class="text-xs font-semibold text-indigo-600 dark:text-indigo-400">${escapeHtml(sale.dateLabel)}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">${escapeHtml(sale.highlights)}</p>
+                      </div>
+
+                      <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+                        <button
+                          type="button"
+                          data-action="details"
+                          data-sale-id="${sale.id}"
+                          class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                        >
+                          View Details &amp; .ics →
+                        </button>
+                        <button
+                          type="button"
+                          data-action="remind"
+                          data-sale-id="${sale.id}"
+                          class="px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                            isSaved
+                              ? 'bg-indigo-600 text-white'
+                              : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700'
+                          }"
+                        >
+                          ${isSaved ? '✓ Saved' : '+ Remind'}
+                        </button>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      /* =========================================================================
+       * 10. RENDERING FUNCTIONS — VIEW 3: BANK OFFERS & REAL DEAL CHECKER
+       * ========================================================================= */
+      function renderBankMatcher() {
+        const selector = document.getElementById('bankCardSelector');
+        const grid = document.getElementById('bankMatchedSalesGrid');
+        const heading = document.getElementById('bankMatchHeading');
+        const countBadge = document.getElementById('bankMatchCount');
+        const clearBtn = document.getElementById('clearBankCardsBtn');
+
+        clearBtn.classList.toggle('hidden', state.selectedBanks.length === 0);
+
+        // Render selectable card buttons
+        selector.innerHTML = BANK_CARDS.map((card) => {
+          const active = state.selectedBanks.includes(card.id);
+          return `
+            <button
+              type="button"
+              data-bank-id="${escapeHtml(card.id)}"
+              class="bank-card-chip inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold border transition cursor-pointer ${
+                active
+                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/20'
+                  : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-indigo-400'
+              }"
+            >
+              <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${active ? '#ffffff' : card.color}"></span>
+              <span>${escapeHtml(card.label)}</span>
+              ${active ? '<span>✓</span>' : ''}
+            </button>
+          `;
+        }).join('');
+
+        // Filter Live & Upcoming sales
+        const activeSales = SALES_DATA.filter((s) => s.status === 'live' || s.status === 'upcoming');
+        const matched = state.selectedBanks.length === 0
+          ? activeSales.filter((s) => s.banks.length > 0)
+          : activeSales.filter((s) => s.banks.some((b) => state.selectedBanks.includes(b)));
+
+        heading.textContent = state.selectedBanks.length === 0
+          ? 'All Live & Upcoming Sales with Bank Card Discounts'
+          : `Sales matching your selected card${state.selectedBanks.length > 1 ? 's' : ''} (${state.selectedBanks.join(', ')})`;
+        countBadge.textContent = `${matched.length} sale${matched.length === 1 ? '' : 's'} matched`;
+
+        if (matched.length === 0) {
+          grid.innerHTML = `
+            <div class="md:col-span-2 p-8 text-center rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-dashed border-slate-300 dark:border-slate-700 text-sm text-slate-500 dark:text-slate-400">
+              No live or upcoming sales currently list this specific card. Try selecting another bank card or check store-wide UPI/coupon deals!
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = matched.map((sale) => {
+          const brand = PLATFORMS[sale.platform];
+          const matchedCards = sale.banks.filter((b) => state.selectedBanks.includes(b));
+          return `
+            <div class="rounded-2xl p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex flex-col justify-between gap-3">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold ${brand.badgeBg}">${escapeHtml(sale.platform)}</span>
+                    ${renderStatusPillHTML(sale)}
+                  </div>
+                  <span class="text-xs font-extrabold text-amber-700 dark:text-amber-300">${escapeHtml(sale.discountLabel)}</span>
+                </div>
+                <h4 class="text-base font-extrabold text-slate-900 dark:text-white">${escapeHtml(sale.title)}</h4>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">${escapeHtml(sale.dateLabel)}</p>
+                <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-indigo-200/70 dark:border-indigo-800/60 text-xs sm:text-sm font-semibold text-indigo-900 dark:text-indigo-200">
+                  ${escapeHtml(sale.bankOffers)}
+                </div>
+                ${matchedCards.length > 0 ? `
+                  <div class="flex flex-wrap gap-1.5 pt-1">
+                    ${matchedCards.map((c) => `<span class="px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300">✓ Matches ${escapeHtml(c)}</span>`).join('')}
+                  </div>
+                ` : ''}
+              </div>
+              <div class="flex items-center justify-between pt-2 border-t border-slate-200/70 dark:border-slate-700/70">
+                <button type="button" data-action="details" data-sale-id="${sale.id}" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer">Sale Details</button>
+                <a href="${sale.url}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-slate-800 dark:text-slate-200 hover:underline">Visit Store ↗</a>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Real Deal Checker Calculator Logic
+      function updateDealChecker() {
+        const mrp = Math.max(0, parseFloat(document.getElementById('dcMrp').value) || 0);
+        const normal = Math.max(0, parseFloat(document.getElementById('dcNormal').value) || 0);
+        const salePrice = Math.max(0, parseFloat(document.getElementById('dcSale').value) || 0);
+        const bankPct = Math.min(100, Math.max(0, parseFloat(document.getElementById('dcBankPct').value) || 0));
+        const capRaw = document.getElementById('dcBankCap').value.trim();
+        const bankCap = capRaw === '' ? Infinity : Math.max(0, parseFloat(capRaw) || 0);
+
+        const rawBankDiscount = (salePrice * bankPct) / 100;
+        const appliedBankDiscount = Math.min(rawBankDiscount, bankCap);
+        const effectivePrice = Math.max(0, salePrice - appliedBankDiscount);
+
+        const realSavingsAmt = normal - effectivePrice;
+        const realSavingsPct = normal > 0 ? (realSavingsAmt / normal) * 100 : 0;
+        const mrpDiscountPct = mrp > 0 ? ((mrp - effectivePrice) / mrp) * 100 : 0;
+
+        document.getElementById('dcEffectivePrice').textContent = formatINR(effectivePrice);
+        document.getElementById('dcCardSaved').textContent = appliedBankDiscount > 0 ? `-${formatINR(appliedBankDiscount)}` : '₹0';
+
+        const realSavingsEl = document.getElementById('dcRealSavings');
+        if (realSavingsAmt >= 0) {
+          realSavingsEl.textContent = `${formatINR(realSavingsAmt)} (${realSavingsPct.toFixed(1)}%)`;
+          realSavingsEl.className = 'text-lg font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5 tabular-nums';
+        } else {
+          realSavingsEl.textContent = `+${formatINR(Math.abs(realSavingsAmt))} costlier`;
+          realSavingsEl.className = 'text-lg font-extrabold text-rose-600 dark:text-rose-400 mt-0.5 tabular-nums';
+        }
+
+        document.getElementById('dcMrpDiscount').textContent = mrp > 0 ? `${Math.max(0, mrpDiscountPct).toFixed(1)}% off` : '—';
+
+        // Determine Verdict Badge & Explanation
+        const badge = document.getElementById('dcVerdictBadge');
+        const expl = document.getElementById('dcExplanation');
+
+        if (salePrice <= 0 || normal <= 0) {
+          badge.textContent = 'Enter Prices to Check';
+          badge.className = 'inline-flex items-center px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200';
+          expl.textContent = 'Enter the normal everyday price and sale listed price to verify if the deal is genuine.';
+          return;
+        }
+
+        if (realSavingsPct >= 15) {
+          badge.textContent = '🔥 Steal Deal — Buy Now';
+          badge.className = 'inline-flex items-center px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold bg-emerald-600 text-white shadow-sm';
+          expl.textContent = `Awesome catch! You are genuinely saving ${formatINR(realSavingsAmt)} (${realSavingsPct.toFixed(1)}%) below its normal everyday selling price, even before counting cashback or SuperCoins.`;
+        } else if (realSavingsPct >= 5) {
+          badge.textContent = '✅ Genuine Discount';
+          badge.className = 'inline-flex items-center px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold bg-sky-600 text-white shadow-sm';
+          expl.textContent = `This is a real ${realSavingsPct.toFixed(1)}% drop (${formatINR(realSavingsAmt)} saved) compared to its usual price. Worth buying if you need it soon.`;
+        } else if (realSavingsPct > 0) {
+          badge.textContent = '⚠️ Tiny Discount — Compare First';
+          badge.className = 'inline-flex items-center px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold bg-amber-500 text-white shadow-sm';
+          expl.textContent = `Despite the advertised ${Math.max(0, mrpDiscountPct).toFixed(0)}% off MRP, you only save ${formatINR(realSavingsAmt)} (${realSavingsPct.toFixed(1)}%) over normal pricing. Check competing apps or wait for the next mega sale.`;
+        } else {
+          badge.textContent = '🚫 Inflated MRP Trap — Wait for Next Sale';
+          badge.className = 'inline-flex items-center px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold bg-rose-600 text-white shadow-sm';
+          expl.textContent = `Watch out! Even after the bank card offer, the effective price (${formatINR(effectivePrice)}) is NOT cheaper than its normal everyday price (${formatINR(normal)}). Skip this hype and wait for the next sale.`;
+        }
+      }
+
+      /* =========================================================================
+       * 11. MODAL & ALERTS DRAWER LOGIC
+       * ========================================================================= */
+      function openSaleModal(saleId) {
+        const sale = SALES_DATA.find((s) => s.id === saleId);
+        if (!sale) return;
+        state.activeModalSaleId = saleId;
+        const brand = PLATFORMS[sale.platform];
+
+        document.getElementById('modalBrandStrip').style.backgroundColor = brand.accentHex;
+        const platBadge = document.getElementById('modalPlatformBadge');
+        platBadge.className = `inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold ${brand.badgeBg}`;
+        platBadge.textContent = sale.platform;
+
+        document.getElementById('modalStatusBadge').outerHTML = `<span id="modalStatusBadge">${renderStatusPillHTML(sale)}</span>`;
+
+        const urgentEl = document.getElementById('modalUrgentBadge');
+        if (sale.urgentBadge) {
+          urgentEl.textContent = sale.urgentBadge;
+          urgentEl.classList.remove('hidden');
+        } else {
+          urgentEl.classList.add('hidden');
+        }
+
+        document.getElementById('modalSaleTitle').textContent = sale.title;
+        document.getElementById('modalSaleDates').textContent = sale.dateLabel;
+        document.getElementById('modalDiscountBadge').textContent = sale.discountLabel;
+        document.getElementById('modalBankOffers').textContent = sale.bankOffers;
+
+        document.getElementById('modalCategoriesList').innerHTML = sale.categories
+          .map((c) => `<span class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200">${escapeHtml(c)}</span>`)
+          .join('');
+
+        document.getElementById('modalWhatToBuy').innerHTML = sale.whatToBuy
+          .map((item) => `<li>${escapeHtml(item)}</li>`)
+          .join('');
+
+        document.getElementById('modalProTips').innerHTML = sale.proTips
+          .map((tip) => `<li>${escapeHtml(tip)}</li>`)
+          .join('');
+
+        document.getElementById('modalVisitStoreLink').href = sale.url;
+        updateModalRemindButton();
+
+        document.getElementById('saleDetailsModal').classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+
+      function updateModalRemindButton() {
+        const btn = document.getElementById('modalRemindToggleBtn');
+        const isSaved = state.reminders.includes(state.activeModalSaleId);
+        if (isSaved) {
+          btn.className = 'inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold bg-emerald-600 text-white border border-emerald-600 hover:bg-emerald-700 transition cursor-pointer';
+          btn.textContent = '✓ Reminder Saved';
+        } else {
+          btn.className = 'inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer';
+          btn.textContent = '+ Save Reminder';
+        }
+      }
+
+      function closeSaleModal() {
+        document.getElementById('saleDetailsModal').classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        state.activeModalSaleId = null;
+      }
+
+      function toggleReminder(saleId) {
+        const sale = SALES_DATA.find((s) => s.id === saleId);
+        if (!sale) return;
+
+        const idx = state.reminders.indexOf(saleId);
+        if (idx === -1) {
+          state.reminders.push(saleId);
+          showToast(`Saved reminder for ${sale.platform} ${sale.title}`, 'success');
+        } else {
+          state.reminders.splice(idx, 1);
+          showToast(`Removed ${sale.platform} ${sale.title} from My Alerts`, 'info');
+        }
+
+        safeWriteStorage(STORAGE_KEYS.REMINDERS, state.reminders);
+        updateAlertsUI();
+        renderSalesGrid();
+        renderCalendarTimeline();
+        if (state.activeModalSaleId === saleId) {
+          updateModalRemindButton();
+        }
+      }
+
+      function updateAlertsUI() {
+        const totalAlerts = state.reminders.length + state.customNotes.length;
+        document.getElementById('alertsBadgeCount').textContent = totalAlerts;
+        document.getElementById('drawerSavedSalesCount').textContent = state.reminders.length;
+        document.getElementById('clearSavedSalesBtn').classList.toggle('hidden', state.reminders.length === 0);
+
+        const listEl = document.getElementById('drawerSavedSalesList');
+        if (state.reminders.length === 0) {
+          listEl.innerHTML = `
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-dashed border-slate-300 dark:border-slate-700 text-center text-xs text-slate-500 dark:text-slate-400">
+              No bookmarked sales yet. Click <strong>"Remind Me"</strong> on any sale card to track it here.
+            </div>
+          `;
+        } else {
+          listEl.innerHTML = state.reminders.map((id) => {
+            const sale = SALES_DATA.find((s) => s.id === id);
+            if (!sale) return '';
+            const brand = PLATFORMS[sale.platform];
+            return `
+              <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700/80 space-y-2">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-extrabold ${brand.badgeBg} mb-1">${escapeHtml(sale.platform)}</span>
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white leading-snug">${escapeHtml(sale.title)}</h4>
+                    <p class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">${escapeHtml(sale.dateLabel)} • ${escapeHtml(sale.discountLabel)}</p>
+                  </div>
+                  <button type="button" data-drawer-remove="${sale.id}" aria-label="Remove reminder" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="flex items-center gap-2 pt-1">
+                  <button type="button" data-drawer-ics="${sale.id}" class="flex-1 py-1.5 px-2.5 rounded-lg text-[11px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition cursor-pointer">
+                    Download .ics
+                  </button>
+                  <a href="${sale.url}" target="_blank" rel="noopener noreferrer" class="py-1.5 px-3 rounded-lg text-[11px] font-bold bg-slate-900 dark:bg-white text-white dark:text-slate-900">
+                    Visit ↗
+                  </a>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // Render Custom Personal Notes
+        const notesEl = document.getElementById('customNotesList');
+        if (state.customNotes.length === 0) {
+          notesEl.innerHTML = `<p class="text-xs text-slate-400 italic">No personal wishlist notes added yet.</p>`;
+        } else {
+          notesEl.innerHTML = state.customNotes.map((note) => `
+            <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700">
+              <button type="button" data-note-toggle="${note.id}" class="flex items-center gap-2.5 text-left flex-1 cursor-pointer">
+                <span class="w-4 h-4 rounded flex items-center justify-center border shrink-0 ${note.done ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-slate-400'}">
+                  ${note.done ? '<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' : ''}
+                </span>
+                <span class="text-xs sm:text-sm font-medium ${note.done ? 'line-through text-slate-400' : 'text-slate-800 dark:text-slate-200'}">${escapeHtml(note.text)}</span>
+              </button>
+              <button type="button" data-note-delete="${note.id}" aria-label="Delete note" class="p-1 text-slate-400 hover:text-rose-500 cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          `).join('');
+        }
+      }
+
+      function openAlertsDrawer() {
+        updateAlertsUI();
+        document.getElementById('alertsDrawer').classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+
+      function closeAlertsDrawer() {
+        document.getElementById('alertsDrawer').classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+
+      /* =========================================================================
+       * 12. VIEW SWITCHING & GLOBAL SEARCH SYNC
+       * ========================================================================= */
+      function switchView(viewName) {
+        state.activeView = viewName;
+
+        ['sales', 'calendar', 'tools'].forEach((v) => {
+          document.getElementById(`view-${v}`).classList.toggle('hidden', v !== viewName);
+        });
+
+        document.querySelectorAll('.view-tab-btn').forEach((btn) => {
+          const active = btn.dataset.view === viewName;
+          if (active) {
+            btn.className = 'view-tab-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap bg-indigo-600 text-white shadow-sm transition cursor-pointer';
+          } else {
+            btn.className = 'view-tab-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer';
+          }
+        });
+
+        if (viewName === 'calendar') renderCalendarTimeline();
+        if (viewName === 'tools') {
+          renderBankMatcher();
+          updateDealChecker();
+        }
+      }
+
+      function syncSearchInputs(val) {
+        state.searchQuery = val;
+        const desktop = document.getElementById('globalSearchDesktop');
+        const mobile = document.getElementById('globalSearchMobile');
+        if (desktop.value !== val) desktop.value = val;
+        if (mobile.value !== val) mobile.value = val;
+
+        document.getElementById('clearSearchDesktop').classList.toggle('hidden', !val);
+        document.getElementById('clearSearchMobile').classList.toggle('hidden', !val);
+
+        // Automatically switch to All Sales view if user types in search while on another tab
+        if (val.trim() && state.activeView !== 'sales') {
+          switchView('sales');
+        }
+        renderSalesGrid();
+      }
+
+      function resetAllFilters() {
+        state.selectedPlatform = 'All';
+        state.selectedStatus = 'all';
+        state.selectedCategory = 'all';
+        state.sortBy = 'priority';
+        document.getElementById('categorySelect').value = 'all';
+        document.getElementById('sortSelect').value = 'priority';
+        syncSearchInputs('');
+        renderPlatformPills();
+        updateStatusButtonsUI();
+        renderSalesGrid();
+      }
+
+      /* =========================================================================
+       * 13. EVENT LISTENERS & INITIALIZATION
+       * ========================================================================= */
+      function bindEvents() {
+        // Logo click -> Home
+        document.getElementById('logoHomeBtn').addEventListener('click', () => {
+          switchView('sales');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Theme toggle
+        document.getElementById('themeToggleBtn').addEventListener('click', toggleTheme);
+
+        // View tabs
+        document.querySelectorAll('.view-tab-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            switchView(btn.dataset.view);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        });
+
+        // Search inputs (Desktop & Mobile synced)
+        ['globalSearchDesktop', 'globalSearchMobile'].forEach((id) => {
+          document.getElementById(id).addEventListener('input', (e) => syncSearchInputs(e.target.value));
+        });
+        ['clearSearchDesktop', 'clearSearchMobile'].forEach((id) => {
+          document.getElementById(id).addEventListener('click', () => syncSearchInputs(''));
+        });
+
+        // Hero CTAs
+        document.getElementById('heroShowLiveBtn').addEventListener('click', () => {
+          state.selectedStatus = 'live';
+          state.selectedPlatform = 'All';
+          renderPlatformPills();
+          updateStatusButtonsUI();
+          renderSalesGrid();
+          document.getElementById('filterAnchor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        document.getElementById('heroOpenToolsBtn').addEventListener('click', () => {
+          switchView('tools');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Platform Pills (Event delegation)
+        document.getElementById('platformPillsContainer').addEventListener('click', (e) => {
+          const pill = e.target.closest('.platform-pill');
+          if (!pill) return;
+          state.selectedPlatform = pill.dataset.platform;
+          renderPlatformPills();
+          renderSalesGrid();
+        });
+
+        // Status Filter Buttons
+        document.getElementById('statusFilterContainer').addEventListener('click', (e) => {
+          const btn = e.target.closest('.status-btn');
+          if (!btn) return;
+          state.selectedStatus = btn.dataset.status;
+          updateStatusButtonsUI();
+          renderSalesGrid();
+        });
+
+        // Category & Sort selects
+        document.getElementById('categorySelect').addEventListener('change', (e) => {
+          state.selectedCategory = e.target.value;
+          renderSalesGrid();
+        });
+        document.getElementById('sortSelect').addEventListener('change', (e) => {
+          state.sortBy = e.target.value;
+          renderSalesGrid();
+        });
+
+        // Reset Filters buttons
+        document.getElementById('resetAllFiltersBtn').addEventListener('click', resetAllFilters);
+        document.getElementById('emptyResetBtn').addEventListener('click', resetAllFilters);
+
+        // Delegated Card Actions (Remind / Details) across all views
+        document.querySelector('main').addEventListener('click', (e) => {
+          const actionBtn = e.target.closest('[data-action]');
+          if (!actionBtn) return;
+          const action = actionBtn.dataset.action;
+          const saleId = actionBtn.dataset.saleId;
+          if (action === 'remind') toggleReminder(saleId);
+          if (action === 'details') openSaleModal(saleId);
+        });
+
+        // Bank Card Matcher selection
+        document.getElementById('bankCardSelector').addEventListener('click', (e) => {
+          const chip = e.target.closest('.bank-card-chip');
+          if (!chip) return;
+          const bankId = chip.dataset.bankId;
+          const idx = state.selectedBanks.indexOf(bankId);
+          if (idx === -1) state.selectedBanks.push(bankId);
+          else state.selectedBanks.splice(idx, 1);
+          renderBankMatcher();
+        });
+
+        document.getElementById('clearBankCardsBtn').addEventListener('click', () => {
+          state.selectedBanks = [];
+          renderBankMatcher();
+        });
+
+        // Real Deal Checker Inputs & Samples
+        ['dcMrp', 'dcNormal', 'dcSale', 'dcBankPct', 'dcBankCap'].forEach((id) => {
+          document.getElementById(id).addEventListener('input', updateDealChecker);
+        });
+
+        document.getElementById('sampleStealBtn').addEventListener('click', () => {
+          document.getElementById('dcMrp').value = 79900;
+          document.getElementById('dcNormal').value = 66999;
+          document.getElementById('dcSale').value = 57999;
+          document.getElementById('dcBankPct').value = 10;
+          document.getElementById('dcBankCap').value = 4000;
+          updateDealChecker();
+          showToast('Loaded sample: Real Black Friday Steal Deal', 'info');
+        });
+
+        document.getElementById('sampleTrapBtn').addEventListener('click', () => {
+          document.getElementById('dcMrp').value = 9999;
+          document.getElementById('dcNormal').value = 2499;
+          document.getElementById('dcSale').value = 2899;
+          document.getElementById('dcBankPct').value = 10;
+          document.getElementById('dcBankCap').value = 500;
+          updateDealChecker();
+          showToast('Loaded sample: Classic Inflated MRP Trap', 'warning');
+        });
+
+        // Modal controls
+        document.getElementById('closeModalBtn').addEventListener('click', closeSaleModal);
+        document.getElementById('modalBackdrop').addEventListener('click', closeSaleModal);
+        document.getElementById('modalRemindToggleBtn').addEventListener('click', () => {
+          if (state.activeModalSaleId) toggleReminder(state.activeModalSaleId);
+        });
+        document.getElementById('modalDownloadIcsBtn').addEventListener('click', () => {
+          const sale = SALES_DATA.find((s) => s.id === state.activeModalSaleId);
+          if (sale) downloadSaleICS(sale);
+        });
+
+        // Alerts Drawer controls
+        document.getElementById('openAlertsBtn').addEventListener('click', openAlertsDrawer);
+        document.getElementById('closeDrawerBtn').addEventListener('click', closeAlertsDrawer);
+        document.getElementById('drawerBackdrop').addEventListener('click', closeAlertsDrawer);
+
+        document.getElementById('clearSavedSalesBtn').addEventListener('click', () => {
+          state.reminders = [];
+          safeWriteStorage(STORAGE_KEYS.REMINDERS, state.reminders);
+          updateAlertsUI();
+          renderSalesGrid();
+          renderCalendarTimeline();
+          showToast('Cleared all saved sale reminders', 'info');
+        });
+
+        document.getElementById('drawerSavedSalesList').addEventListener('click', (e) => {
+          const removeBtn = e.target.closest('[data-drawer-remove]');
+          if (removeBtn) {
+            toggleReminder(removeBtn.dataset.drawerRemove);
+            return;
+          }
+          const icsBtn = e.target.closest('[data-drawer-ics]');
+          if (icsBtn) {
+            const sale = SALES_DATA.find((s) => s.id === icsBtn.dataset.drawerIcs);
+            if (sale) downloadSaleICS(sale);
+          }
+        });
+
+        // Custom Note Form
+        document.getElementById('customNoteForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const input = document.getElementById('customNoteInput');
+          const text = input.value.trim();
+          if (!text) return;
+          state.customNotes.unshift({
+            id: 'note_' + Date.now(),
+            text,
+            done: false
+          });
+          safeWriteStorage(STORAGE_KEYS.NOTES, state.customNotes);
+          input.value = '';
+          updateAlertsUI();
+          showToast('Personal alert note added!', 'success');
+        });
+
+        document.getElementById('customNotesList').addEventListener('click', (e) => {
+          const toggleBtn = e.target.closest('[data-note-toggle]');
+          if (toggleBtn) {
+            const note = state.customNotes.find((n) => n.id === toggleBtn.dataset.noteToggle);
+            if (note) {
+              note.done = !note.done;
+              safeWriteStorage(STORAGE_KEYS.NOTES, state.customNotes);
+              updateAlertsUI();
+            }
+            return;
+          }
+          const delBtn = e.target.closest('[data-note-delete]');
+          if (delBtn) {
+            state.customNotes = state.customNotes.filter((n) => n.id !== delBtn.dataset.noteDelete);
+            safeWriteStorage(STORAGE_KEYS.NOTES, state.customNotes);
+            updateAlertsUI();
+            showToast('Note removed', 'info');
+          }
+        });
+
+        // Keyboard ESC closes modal or drawer
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            if (!document.getElementById('saleDetailsModal').classList.contains('hidden')) {
+              closeSaleModal();
+            }
+            if (!document.getElementById('alertsDrawer').classList.contains('hidden')) {
+              closeAlertsDrawer();
+            }
+          }
+        });
+      }
+
+      // Bootstrap application on DOM ready
+      function init() {
+        initTheme();
+        renderHeroStats();
+        renderPlatformPills();
+        updateStatusButtonsUI();
+        switchView('sales');
+        renderSalesGrid();
+        updateDealChecker();
+        updateAlertsUI();
+        startCountdownTimer();
+        bindEvents();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
+```
